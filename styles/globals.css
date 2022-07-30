@@ -1,0 +1,126 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+    font-family: 'Rubik';
+    font-weight: 300;
+    src: url('/fonts/rubik/Rubik-Light.ttf');
+}
+@font-face {
+    font-family: 'Rubik';
+    font-weight: 400;
+    src: url('/fonts/rubik/Rubik-Regular.ttf');
+}
+@font-face {
+    font-family: "Rubik";
+    font-weight: 500;
+    src: url("/fonts/rubik/Rubik-Regular.ttf");
+}
+@font-face {
+    font-family: "Rubik";
+    font-weight: 600;
+    src: url("/fonts/rubik/Rubik-Medium.ttf");
+}
+@font-face {
+    font-family: "Rubik";
+    font-weight: 700;
+    src: url("/fonts/rubik/Rubik-Bold.ttf");
+}
+@font-face {
+    font-family: "Rubik";
+    font-weight: 800;
+    src: url("/fonts/rubik/Rubik-Bold.ttf");
+}
+
+@font-face {
+    font-family: 'Poppins';
+    font-weight: 200;
+    src: url('/fonts/Poppins/Poppins-ExtraLight.otf')
+        format('truetype');
+}
+@font-face {
+    font-family: 'Poppins';
+    font-weight: 300;
+    src: url('/fonts/Poppins/Poppins-Light.otf');
+}
+@font-face {
+    font-family: 'Poppins';
+    font-weight: 400;
+    src: url('/fonts/Poppins/Poppins-Regular.otf');
+}
+@font-face {
+    font-family: "Poppins";
+    font-weight: 500;
+    src: url("/fonts/poppins/Poppins-Medium.otf");
+}
+@font-face {
+    font-family: "Poppins";
+    font-weight: 600;
+    src: url("/fonts/poppins/Poppins-SemiBold.otf");
+}
+@font-face {
+    font-family: "Poppins";
+    font-weight: 700;
+    src: url("/fonts/poppins/Poppins-Bold.otf");
+}
+@font-face {
+    font-family: "Poppins";
+    font-weight: 800;
+    src: url("/fonts/poppins/Poppins-ExtraBold.otf");
+}
+
+
+body {
+    font-family: "Rubik";
+}
+
+@layer base {
+
+    /* typography */
+    .fr-text-display-3 {
+        @apply text-[52px] font-bold;
+    }
+    .fr-text-display-2 {
+        @apply text-[32px] font-bold;
+    }
+    .fr-text-display-1 {
+        @apply text-[30px] font-bold;
+    }
+    .fr-text-headline-2 {
+        @apply text-[28px] font-semibold;
+    }
+    .fr-text-headline-1 {
+        @apply text-[24px] font-semibold;
+    }
+    .fr-text-title-1 {
+        @apply text-[22px] font-medium;
+    }
+    .fr-text-subhead-2 {
+        @apply text-[18px] font-bold;
+    }
+    .fr-text-subhead-1 {
+        @apply text-[16px] font-medium;
+    }
+    .fr-text-body {
+        @apply text-[14px];
+    }
+    .fr-text-caption {
+        @apply text-[12px];
+    }
+    .fr-text-button {
+        @apply text-[14px] font-medium;
+    }
+}
+
+@layer components {
+    select:required:invalid {
+        @apply text-darkgrey;
+    }
+    option[value=""][disabled] {
+        @apply hidden
+    }
+    option {
+        @apply text-black;
+    }
+}
