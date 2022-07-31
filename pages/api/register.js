@@ -68,11 +68,13 @@ export default async function handler(req, res) {
           ((categoryId == "01.A" || categoryId == "01.B") &&
             gender == "M" &&
             maleMemberCount >= 3) ||
-          (gender == "F" && femaleMemberCount >= 2);
+          ((categoryId == "01.A" || categoryId == "01.B") &&
+            gender == "F" &&
+            femaleMemberCount >= 2);
 
         const categoryType2Validation =
           (categoryId == "02" && gender == "M" && maleMemberCount >= 1) ||
-          (gender == "F" && femaleMemberCount >= 1);
+          (categoryId == "02" && gender == "F" && femaleMemberCount >= 1);
         if (categoryType1Validation || categoryType2Validation) {
           return response.badRequest(
             "Group sudah penuh, atau anda tidak memenuhi syarat.",

@@ -197,12 +197,18 @@ const RegisterChooseGroup = () => {
                     draftRegister.categoryId == "01.B") &&
                     draftRegister.gender == "M" &&
                     maleMemberCount >= 3) ||
-                  (draftRegister.gender == "F" && femaleMemberCount >= 2);
+                  ((draftRegister.categoryId == "01.A" ||
+                    draftRegister.categoryId == "01.B") &&
+                    draftRegister.gender == "F" &&
+                    femaleMemberCount >= 2);
+
                 const categoryType2Validation =
                   (draftRegister.categoryId == "02" &&
                     draftRegister.gender == "M" &&
                     maleMemberCount >= 1) ||
-                  (draftRegister.gender == "F" && femaleMemberCount >= 1);
+                  (draftRegister.categoryId == "02" &&
+                    draftRegister.gender == "F" &&
+                    femaleMemberCount >= 1);
                 let isDisabled =
                   categoryType1Validation || categoryType2Validation;
 
