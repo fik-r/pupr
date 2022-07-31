@@ -18,7 +18,7 @@ export default async function handler(req, res) {
         process.env.ACCESS_TOKEN_SECRET_KEY,
         {
           algorithm: "HS512",
-          expiresIn: "600000", // 5 minutes
+          expiresIn: "1800000", // 5 minutes
         }
       );
 

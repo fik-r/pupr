@@ -29,10 +29,8 @@ const RegisterChooseGroup = () => {
   useEffect(() => {
     const draftRegister =
       JSON.parse(localStorage.getItem(STORAGE_DRAFT_REGISTER)) || {};
-    if (!draftRegister.categoryId || !localStorage.getItem(ACCESS_TOKEN)) {
+    if (!draftRegister.categoryId && !localStorage.getItem(ACCESS_TOKEN)) {
       router.push("/");
-    } else {
-      // getGroup();
     }
   }, []);
 

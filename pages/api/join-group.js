@@ -67,7 +67,7 @@ export default async function handler(req, res) {
                   maleMemberCount >= 1) ||
                 (user.sex == "F" && femaleMemberCount >= 1);
               if (categoryType1Validation || categoryType2Validation) {
-                return badRequest(
+                return response.badRequest(
                   "Group sudah penuh, atau anda tidak memenuhi syarat.",
                   res
                 );

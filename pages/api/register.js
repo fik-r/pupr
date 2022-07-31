@@ -1,6 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import knex from "../../utils/knex";
-import response, { badRequest } from "../../utils/response";
+import response from "../../utils/response";
 import constants from "../../utils/constants";
 import { uuid } from "uuidv4";
 import moment from "moment";
@@ -74,7 +74,7 @@ export default async function handler(req, res) {
           (categoryId == "02" && gender == "M" && maleMemberCount >= 1) ||
           (gender == "F" && femaleMemberCount >= 1);
         if (categoryType1Validation || categoryType2Validation) {
-          return badRequest(
+          return response.badRequest(
             "Group sudah penuh, atau anda tidak memenuhi syarat.",
             res
           );
@@ -102,7 +102,7 @@ export default async function handler(req, res) {
         process.env.ACCESS_TOKEN_SECRET_KEY,
         {
           algorithm: "HS512",
-          expiresIn: "600000", // 5 minutes
+          expiresIn: "1800000", // 5 minutes
         }
       );
 
