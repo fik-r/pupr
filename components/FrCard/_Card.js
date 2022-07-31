@@ -10,7 +10,7 @@ const FrCard = (props) => {
     labelAction,
     children,
     selected,
-    disabled
+    disabled,
   } = props;
   return (
     <div
@@ -20,10 +20,18 @@ const FrCard = (props) => {
       )}
     >
       <div className="flex justify-between m-[15px]">
-        <span className="text-muted font-semibold fr-text-body">{title}</span>
-        <span className="text-accent fr-text-body font-semibold">
-          {category}
+        <span
+          className={`text-muted font-semibold fr-text-body ${
+            !category ? "text-accent" : ""
+          }`}
+        >
+          {title}
         </span>
+        {category && (
+          <span className="text-accent fr-text-body font-semibold">
+            {category}
+          </span>
+        )}
       </div>
       <div>
         <div className="px-[18px] py-[15px] mb-[70px]">{children}</div>

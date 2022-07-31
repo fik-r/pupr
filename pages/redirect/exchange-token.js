@@ -10,6 +10,9 @@ export default function ExchangeToken(props) {
   const router = useRouter();
   useEffect(() => {
     const { error } = router.query;
+
+    const clientId = process.env.NEXT_PUBLIC_STRAVA_CLIENT_ID;
+    const clientSecret = process.env.NEXT_PUBLIC_STRAVA_CLIENT_SECRET;
     if (error == "access_denied") {
       localStorage.setItem(STORAGE_TOAST_ERROR, "Akses strava di tolak");
       router.push("/register/connect-strava");
@@ -17,7 +20,7 @@ export default function ExchangeToken(props) {
       axios
         .post("https://www.strava.com/oauth/token", null, {
           params: {
-            client_id: 90543,
+            client_id: clientId,
             client_secret: "d97aefd34f169bb8be5fc2c9efcb1413e74378a0",
             code: props.data.code,
             grant_type: "authorization_code",
@@ -51,9 +54,7 @@ export default function ExchangeToken(props) {
           expires_at
         );
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }
 
   function linkToStrava(

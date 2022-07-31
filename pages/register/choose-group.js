@@ -216,11 +216,26 @@ const RegisterChooseGroup = () => {
                 return (
                   <FrCardGroup
                     key={index}
-                    title={`${memberCount}/${maxMember}`}
-                    category={d.name}
+                    // title={`${memberCount}/${maxMember}`}
+                    title={d.name}
+                    // category={d.name}
                     captainName={d.user_name}
                     selected={d.selected}
                     disabled={isDisabled}
+                    maleMemberCount={maleMemberCount}
+                    femaleMemberCount={femaleMemberCount}
+                    maxMaleMember={
+                      draftRegister.categoryId == "01.A" ||
+                      draftRegister.categoryId == "01.B"
+                        ? "3"
+                        : "1"
+                    }
+                    maxFemaleMember={
+                      draftRegister.categoryId == "01.A" ||
+                      draftRegister.categoryId == "01.B"
+                        ? "2"
+                        : "1"
+                    }
                     onClickAction={() => {
                       setData(
                         data.map((_data) => {

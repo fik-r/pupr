@@ -40,6 +40,7 @@ API.interceptors.response.use(
           return API(originalRequest);
         })
         .catch((error) => {
+          console.log("TSET")
           localStorage.clear();
           Router.push("/login");
           return Promise.reject(error);
