@@ -11,6 +11,7 @@ import {
 } from "../../utils/constants";
 import { ToastSuccess, ToastError } from "../../components/FrToast";
 import moment from "moment";
+import API from "../../utils/api";
 
 const RegisterPersonalInformation = () => {
   const router = useRouter();
@@ -26,6 +27,7 @@ const RegisterPersonalInformation = () => {
   const [unitOrganization, setUnitOrganization] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const [emailValidation, setEmailValidation] = useState(false);
   const passwordValidation = password.length == 0;
@@ -55,20 +57,32 @@ const RegisterPersonalInformation = () => {
   }, []);
   function handleNext() {
     if (isNextBtnDisabled) return;
-    localStorage.setItem(
-      STORAGE_DRAFT_REGISTER,
-      JSON.stringify({
-        email: email,
-        password: password,
-        fullName: fullName,
-        nip: nip,
-        dob: moment(dob).utc(),
-        gender: gender,
-        phoneNumber: phoneNumber,
-        unitOrganization: unitOrganization,
+    setLoading(true);
+    API.post("/api/check-email", {
+      email: email,
+    })
+      .then(() => {
+        localStorage.setItem(
+          STORAGE_DRAFT_REGISTER,
+          JSON.stringify({
+            email: email,
+            password: password,
+            fullName: fullName,
+            nip: nip,
+            dob: moment(dob).utc(),
+            gender: gender,
+            phoneNumber: phoneNumber,
+            unitOrganization: unitOrganization,
+          })
+        );
+        router.push("choose-category");
       })
-    );
-    router.push("choose-category");
+      .catch((err) => {
+        setError(ToastError(err.response.data.message));
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }
   return (
     <FrLayout2 error={error} success={success}>
@@ -222,6 +236,7 @@ const RegisterPersonalInformation = () => {
             className="w-[268px]"
             color="primary"
             label="Selanjutnya"
+            loading={loading}
             disabled={isNextBtnDisabled}
             onClick={handleNext}
           />
