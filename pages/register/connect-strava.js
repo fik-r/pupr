@@ -9,7 +9,7 @@ const ConnectStrava = () => {
   const clientId = process.env.NEXT_PUBLIC_STRAVA_CLIENT_ID;
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const redirectUrl = baseUrl + "/redirect";
-  const scope = "read_all";
+  const scope = "activity:read_all";
 
   function linkToStrava() {
     window.location = `http://www.strava.com/oauth/authorize?client_id=${clientId}&response_type=code&redirect_uri=${redirectUrl}/exchange-token&approval_prompt=force&scope=${scope}`;
