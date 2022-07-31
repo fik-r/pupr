@@ -31,6 +31,16 @@ export default async function handler(req, res) {
             try {
               if (err)
                 return response.unauthorized("Token invalid or expired", res);
+              const userStrava = await knex("user_athlete_strava")
+                .where("athlete_id", athleteId)
+                .select("athlete_id")
+                .first();
+              if (userStrava) {
+                return response.conflict(
+                  "Akun strava sudah terhubung dengan akun lain",
+                  res
+                );
+              }
               await knex("user_athlete_strava").insert({
                 id: uuid(),
                 user_id: decoded.user_id,
@@ -60,7 +70,6 @@ export default async function handler(req, res) {
         return response.unauthorized("Missing token", res);
       }
     } catch (e) {
-      console.log(e);
       return response.error(500, "Internal server error", res);
     }
   } else {

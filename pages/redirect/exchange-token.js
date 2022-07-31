@@ -1,7 +1,7 @@
 import Head from "next/head";
 import React, { useEffect } from "react";
 import { FrLayout2 } from "../../components/FrLayout";
-import { ATHLETE_ID } from "../../utils/constants";
+import { ATHLETE_ID, STORAGE_TOAST_ERROR } from "../../utils/constants";
 import { useRouter } from "next/router";
 import axios from "axios";
 import API from "../../utils/api";
@@ -9,23 +9,29 @@ import API from "../../utils/api";
 export default function ExchangeToken(props) {
   const router = useRouter();
   useEffect(() => {
-    axios
-      .post("https://www.strava.com/oauth/token", null, {
-        params: {
-          client_id: 90543,
-          client_secret: "d97aefd34f169bb8be5fc2c9efcb1413e74378a0",
-          code: props.data.code,
-          grant_type: "authorization_code",
-        },
-      })
-      .then((res) => {
-        const { refresh_token, access_token, expires_in, expires_at } =
-          res.data;
-        getAthlete(access_token, refresh_token, expires_in, expires_at);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    const { error } = router.query;
+    if (error == "access_denied") {
+      localStorage.setItem(STORAGE_TOAST_ERROR, "Akses strava di tolak");
+      router.push("/register/connect-strava");
+    } else {
+      axios
+        .post("https://www.strava.com/oauth/token", null, {
+          params: {
+            client_id: 90543,
+            client_secret: "d97aefd34f169bb8be5fc2c9efcb1413e74378a0",
+            code: props.data.code,
+            grant_type: "authorization_code",
+          },
+        })
+        .then((res) => {
+          const { refresh_token, access_token, expires_in, expires_at } =
+            res.data;
+          getAthlete(access_token, refresh_token, expires_in, expires_at);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }, []);
 
   function getAthlete(access_token, refresh_token, expires_in, expires_at) {
@@ -70,7 +76,13 @@ export default function ExchangeToken(props) {
         router.push("/profile");
       })
       .catch((e) => {
-        console.log(e);
+        if (e.response.status == 409) {
+          localStorage.setItem(
+            STORAGE_TOAST_ERROR,
+            "Akun sudah terhubung dengan akun lain"
+          );
+          router.push("/register/connect-strava");
+        }
       });
   }
   return (
@@ -82,7 +94,7 @@ export default function ExchangeToken(props) {
           <link rel="icon" href="/favicon.ico" />
         </Head>
 
-        <div className="flex text-center">
+        <div className="flex justify-center items-center">
           <p>Redirecting...</p>
         </div>
       </FrLayout2>
