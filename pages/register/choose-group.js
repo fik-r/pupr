@@ -27,7 +27,13 @@ const RegisterChooseGroup = () => {
   const isNextBtnDisabled = data.find((c) => c.selected == true) == null;
 
   useEffect(() => {
-    getGroup();
+    const draftRegister =
+      JSON.parse(localStorage.getItem(STORAGE_DRAFT_REGISTER)) || {};
+    if (!draftRegister.categoryId && !localStorage.getItem(accessToken)) {
+      router.push("/");
+    } else {
+      getGroup();
+    }
   }, []);
 
   useEffect(() => {
@@ -39,8 +45,29 @@ const RegisterChooseGroup = () => {
     setLoading(true);
     const draftRegister =
       JSON.parse(localStorage.getItem(STORAGE_DRAFT_REGISTER)) || {};
-    API
-      .post("/api/register", {
+    const accessToken = localStorage.getItem(ACCESS_TOKEN) || "";
+
+    if (!draftRegister.categoryId && accessToken == "") {
+      router.push("/");
+    }
+
+    if (accessToken) {
+      API.post("/api/join-group", {
+        teamId: data.find((d) => d.selected == true).id,
+        categoryId: draftRegister.categoryId,
+      })
+        .then((res) => {
+          localStorage.removeItem(STORAGE_DRAFT_REGISTER);
+          router.push("/profile");
+        })
+        .catch((err) => {
+          setError(ToastError(err.response.data.message));
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    } else {
+      API.post("/api/register", {
         email: draftRegister.email,
         password: draftRegister.password,
         fullName: draftRegister.fullName,
@@ -52,33 +79,33 @@ const RegisterChooseGroup = () => {
         categoryId: draftRegister.categoryId,
         organization: draftRegister.unitOrganization,
       })
-      .then((res) => {
-        localStorage.removeItem(STORAGE_DRAFT_REGISTER);
-        localStorage.setItem(ACCESS_TOKEN, res.data.payload.access_token);
-        localStorage.setItem(REFRESH_TOKEN, res.data.payload.refresh_token);
-        router.push(`connect-strava`);
-      })
-      .catch((err) => {
-        setError(ToastError(err.response.data.message));
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+        .then((res) => {
+          localStorage.removeItem(STORAGE_DRAFT_REGISTER);
+          localStorage.setItem(ACCESS_TOKEN, res.data.payload.accessToken);
+          localStorage.setItem(REFRESH_TOKEN, res.data.payload.refreshToken);
+          router.push(`connect-strava`);
+        })
+        .catch((err) => {
+          setError(ToastError(err.response.data.message));
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
   }
 
   function getGroup() {
     const draftRegister =
       JSON.parse(localStorage.getItem(STORAGE_DRAFT_REGISTER)) || {};
-    API
-      .get("/api/group", {
-        params: {
-          q: query,
-          unit_organization: draftRegister.unitOrganization,
-          category: draftRegister.categoryId,
-          page: page,
-          limit: 10,
-        },
-      })
+    API.get("/api/group", {
+      params: {
+        q: query,
+        unit_organization: draftRegister.unitOrganization,
+        category: draftRegister.categoryId,
+        page: page,
+        limit: 10,
+      },
+    })
       .then((res) => {
         const _data = res.data.payload.data;
         _data.map((d) => {
@@ -177,7 +204,7 @@ const RegisterChooseGroup = () => {
                     memberCount > maxMember);
 
                 const categoryType2Validation =
-                  (draftRegister.categoryId == "" &&
+                  (draftRegister.categoryId == "02" &&
                     draftRegister.gender == "M" &&
                     maleMemberCount >= 1) ||
                   (draftRegister.gender == "F" &&

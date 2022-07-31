@@ -9,7 +9,7 @@ const ConnectStrava = () => {
   const clientId = process.env.NEXT_PUBLIC_STRAVA_CLIENT_ID;
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const redirectUrl = baseUrl + "/redirect";
-  const scope = "read";
+  const scope = "read_all";
 
   function linkToStrava() {
     window.location = `http://www.strava.com/oauth/authorize?client_id=${clientId}&response_type=code&redirect_uri=${redirectUrl}/exchange-token&approval_prompt=force&scope=${scope}`;
@@ -31,10 +31,10 @@ const ConnectStrava = () => {
           src="/icons/ic_done_secondary.svg"
         />
         <span className="fr-text-headline-1 mobile:fr-text-subhead-2 text-black self-center">
-          Pendaftaran Peserta Berhasil
+          Data Kamu Sudah Tersimpan
         </span>
         <span className="fr-text-subhead-1 mobile:fr-text-body text-muted self-center">
-          Silahkan masuk untuk melanjutkan
+          Selesaikan registrasi dengan menghubungkan akun Strava
         </span>
         <FrButton
           className="w-[242px] h-[61px] self-center mt-[28px]"

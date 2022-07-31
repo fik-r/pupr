@@ -7,7 +7,14 @@ import jwt from "jsonwebtoken";
 
 export default async function handler(req, res) {
   if (req.method == "POST") {
-    const { athleteId, profile, accessToken, refreshToken } = req.body;
+    const {
+      athleteId,
+      profile,
+      accessToken,
+      refreshToken,
+      expiresIn,
+      expiresAt,
+    } = req.body;
     try {
       if (!athleteId)
         return response.badRequest("field athleteId required", res);
@@ -31,13 +38,15 @@ export default async function handler(req, res) {
                 profile: profile,
                 access_token: accessToken,
                 refresh_token: refreshToken,
+                expires_in: expiresIn,
+                expires_at: expiresAt,
                 created_date: moment().utc().format("YYYY-MM-DD HH:mm:ss"),
               });
 
               return response.ok(
                 "Successfully link to strava",
                 {
-                  userId: decoded.user_id,
+                  athleteId: athleteId,
                 },
                 res
               );

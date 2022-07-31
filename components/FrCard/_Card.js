@@ -26,8 +26,8 @@ const FrCard = (props) => {
         </span>
       </div>
       <div>
-        <div className="px-[18px] py-[15px]">{children}</div>
-        <div className="px-[18px] py-[15px]">
+        <div className="px-[18px] py-[15px] mb-[70px]">{children}</div>
+        <div className="px-[18px] py-[15px] absolute bottom-0 w-full">
           <FrButton
             block
             color="secondary"

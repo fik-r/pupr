@@ -50,6 +50,9 @@ const RegisterPersonalInformation = () => {
     phoneValidation ||
     unitOrganizationValidation;
 
+  useEffect(() => {
+    localStorage.removeItem(STORAGE_DRAFT_REGISTER);
+  }, []);
   function handleNext() {
     if (isNextBtnDisabled) return;
     localStorage.setItem(
@@ -92,7 +95,7 @@ const RegisterPersonalInformation = () => {
             onChange={(event) => {
               const value = event.target.value;
               const isValid = event.target.validity.valid;
-              setEmailValidation(!isValid)
+              setEmailValidation(!isValid);
               setEmail(value);
             }}
             value={email}

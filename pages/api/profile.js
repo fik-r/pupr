@@ -40,14 +40,48 @@ export default async function handler(req, res) {
               knex("team as t")
                 .where("t.id", user.team_id)
                 .join("user_accounts as u", "u.id", "t.user_id")
-                .select("u.full_name as captain_name", "t.name")
+                .select("u.full_name as captain_name", "t.name", "t.category")
                 .first(),
               knex("user_accounts as u")
                 .where("u.team_id", user.team_id)
-                .select("u.full_name"),
+                .select("u.full_name", "u.sex", "u.id"),
             ]);
 
+            if (userGroup) {
+              const memberCount = memberUserGroup.length;
+              const maleMember = memberUserGroup.filter(
+                (member) => member.sex == "M"
+              );
+              const femaleMember = memberUserGroup.filter(
+                (member) => member.sex == "F"
+              );
+              const maleMemberCount = maleMember ? maleMember.length : 0;
+              const femaleMemberCount = femaleMember ? femaleMember.length : 0;
+              const maxMember =
+                userGroup.category == "01.A" || userGroup.category == "01.B"
+                  ? 5
+                  : 2;
 
+              const categoryType1Validation =
+                ((userGroup.category == "01.A" ||
+                  userGroup.category == "01.B") &&
+                  userGroup.sex == "M" &&
+                  maleMemberCount == 3) ||
+                (userGroup.sex == "F" &&
+                  femaleMemberCount == 2 &&
+                  memberCount == maxMember);
+
+              const categoryType2Validation =
+                (userGroup.category == "02" &&
+                  userGroup.sex == "M" &&
+                  maleMemberCount == 1) ||
+                (userGroup.sex == "F" &&
+                  femaleMemberCount == 1 &&
+                  memberCount == maxMember);
+              let isReady = categoryType1Validation || categoryType2Validation;
+
+              userGroup.isReady = isReady;
+            }
             return response.ok(
               "Successfully fetch profile",
               {

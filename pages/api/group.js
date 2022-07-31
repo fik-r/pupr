@@ -12,7 +12,7 @@ export default async function handler(req, res) {
       const limit = parseInt(req.query.limit);
       const offset = parseInt(page != 0 ? page * limit : 0);
 
-      const groups = await knex("team")
+      let groups = await knex("team")
         .modify((queryBuilder) => {
           if (query)
             queryBuilder.whereRaw("LOWER(team.name) LIKE ?", [
@@ -29,19 +29,25 @@ export default async function handler(req, res) {
           "team.name",
           "team.id",
           "team.category",
-          "team.user_id",
+          "team.user_id as captain_id",
           "user_accounts.organization",
-          "user_accounts.full_name as user_name"
+          "user_accounts.full_name as user_name",
+          "user_accounts.id as user_id "
         );
 
       if (groups.length > 0) {
         for (let i = 0; i < groups.length; i++) {
           const members = await knex("user_accounts")
             .where("team_id", groups[i].id)
-            .select("full_name", "sex", "team_id");
+            .select("full_name", "sex", "team_id", "id");
           groups[i].members = members;
         }
       }
+
+      groups = groups.filter((group) => {
+        return group.user_id == group.captain_id;
+      });
+
       return response.ok(
         "Successfully fetch group",
         {

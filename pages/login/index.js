@@ -5,7 +5,7 @@ import { FrTextField, FrDropdownField } from "../../components/FrField";
 import { useRouter } from "next/router";
 import FrButton from "../../components/FrButton";
 import useResponsive from "../../utils/media-query";
-import { ACCESS_TOKEN, REFRESH_TOKEN, ATHLETE_ID } from "../../utils/constants";
+import { ACCESS_TOKEN, REFRESH_TOKEN, ATHLETE_ID, STORAGE_DRAFT_REGISTER} from "../../utils/constants";
 import { ToastSuccess, ToastError } from "../../components/FrToast";
 import API from "../../utils/api";
 
@@ -18,6 +18,10 @@ const Login = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    localStorage.removeItem(STORAGE_DRAFT_REGISTER);
+  }, []);
 
   function submitLogin() {
     setLoading(true);

@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { FrLayout2 } from "../../components/FrLayout";
 import { FrTextField } from "../../components/FrField";
@@ -20,13 +20,37 @@ const RegisterAddGroup = () => {
 
   const groupNameValidation = groupName.length == 0;
 
+  useEffect(() => {
+    const draftRegister =
+      JSON.parse(localStorage.getItem(STORAGE_DRAFT_REGISTER)) || {};
+    if (!draftRegister.categoryId && !localStorage.getItem(ACCESS_TOKEN)) {
+      router.push("/");
+    }
+  }, []);
+
   function handleNext() {
     if (groupNameValidation) return;
     setLoading(true);
     const draftRegister =
       JSON.parse(localStorage.getItem(STORAGE_DRAFT_REGISTER)) || {};
-    API
-      .post("/api/register", {
+    const accessToken = localStorage.getItem(ACCESS_TOKEN) || "";
+    if (accessToken) {
+      API.post("/api/join-group", {
+        teamName: groupName,
+        categoryId: draftRegister.categoryId,
+      })
+        .then((res) => {
+          localStorage.removeItem(STORAGE_DRAFT_REGISTER);
+          router.push("/profile");
+        })
+        .catch((err) => {
+          setError(ToastError(err.response.data.message));
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    } else {
+      API.post("/api/register", {
         email: draftRegister.email,
         password: draftRegister.password,
         fullName: draftRegister.fullName,
@@ -38,18 +62,19 @@ const RegisterAddGroup = () => {
         categoryId: draftRegister.categoryId,
         organization: draftRegister.unitOrganization,
       })
-      .then((res) => {
-        localStorage.removeItem(STORAGE_DRAFT_REGISTER);
-        localStorage.setItem(ACCESS_TOKEN, res.data.payload.accessToken);
-        localStorage.setItem(REFRESH_TOKEN, res.data.payload.refreshToken);
-        router.push(`connect-strava`);
-      })
-      .catch((err) => {
-        setError(ToastError(err.response.data.message));
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+        .then((res) => {
+          localStorage.removeItem(STORAGE_DRAFT_REGISTER);
+          localStorage.setItem(ACCESS_TOKEN, res.data.payload.accessToken);
+          localStorage.setItem(REFRESH_TOKEN, res.data.payload.refreshToken);
+          router.push(`connect-strava`);
+        })
+        .catch((err) => {
+          setError(ToastError(err.response.data.message));
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
   }
 
   return (

@@ -4,7 +4,11 @@ import { useEffect, useState } from "react";
 import { FrLayout2 } from "../../components/FrLayout";
 import { FrCardCategory } from "../../components/FrCard";
 import FrButton from "../../components/FrButton";
-import { LIST_CATEGORY, STORAGE_DRAFT_REGISTER } from "../../utils/constants";
+import {
+  ACCESS_TOKEN,
+  LIST_CATEGORY,
+  STORAGE_DRAFT_REGISTER,
+} from "../../utils/constants";
 import moment from "moment";
 
 const RegisterChooseCategory = () => {
@@ -22,8 +26,13 @@ const RegisterChooseCategory = () => {
   useEffect(() => {
     const draftRegister =
       JSON.parse(localStorage.getItem(STORAGE_DRAFT_REGISTER)) || {};
-    setAge(moment().diff(draftRegister.dob, "years"));
-  });
+
+    if (!draftRegister.email && !localStorage.getItem(ACCESS_TOKEN)) {
+      router.push("/");
+    } else {
+      setAge(moment().diff(draftRegister.dob, "years"));
+    }
+  }, []);
 
   const isNextBtnDisabled =
     listCategory.find((c) => c.selected == true) == null;

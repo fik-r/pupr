@@ -3,10 +3,17 @@ import { useRouter } from "next/router";
 import { FrLayout1 } from "../components/FrLayout";
 import FrButton from "../components/FrButton";
 import useResponsive from "../utils/media-query";
+import { useEffect } from "react";
+import { STORAGE_DRAFT_REGISTER } from "../utils/constants";
 
 const Home = () => {
   const router = useRouter();
   const { isMobile } = useResponsive();
+
+  useEffect(() => {
+    localStorage.removeItem(STORAGE_DRAFT_REGISTER);
+  }, []);
+
   return (
     <FrLayout1>
       <Head>

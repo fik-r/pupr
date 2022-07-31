@@ -5,31 +5,57 @@ import useResponsive from "../utils/media-query";
 import FrText from "../components/FrText";
 import FrButton from "../components/FrButton";
 import { useState, useEffect } from "react";
-import { ToastError } from "../components/FrToast";
+import { ToastError, ToastSuccess } from "../components/FrToast";
 import moment from "moment";
 import API from "../utils/api";
-import { ATHLETE_ID } from "../utils/constants";
+import {
+  ATHLETE_ID,
+  STORAGE_DRAFT_REGISTER,
+  ACCESS_TOKEN,
+} from "../utils/constants";
 
 const Profile = () => {
   const router = useRouter();
   const { isMobile } = useResponsive();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
   const [user, setUser] = useState({});
   const [member, setMember] = useState([]);
   const [group, setGroup] = useState({});
   const [athleteId, setAthleteId] = useState("");
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [selectedMember, setSelectedMember] = useState("");
 
   useEffect(() => {
+    if (!localStorage.getItem(ACCESS_TOKEN)) {
+      router.push("/");
+    }
     setLoading(true);
     setAthleteId(localStorage.getItem(ATHLETE_ID));
+    getProfile();
+  }, []);
+
+  useEffect(() => {
+    console.log(deleteModal);
+  });
+  function getProfile() {
     API.get("/api/profile")
       .then((res) => {
         const data = res.data.payload;
         setUser(data.user || {});
-        console.log(moment.unix(data.user.dob).format("YYYY MMMM DD"));
         setMember(data.member || {});
         setGroup(data.group || {});
+        if (!data.group) {
+          localStorage.setItem(
+            STORAGE_DRAFT_REGISTER,
+            JSON.stringify({
+              gender: data.user.sex,
+              unitOrganization: data.user.organization,
+            })
+          );
+          router.push("/register/choose-category");
+        }
       })
       .catch((err) => {
         setError(ToastError(err.response.data.message));
@@ -37,9 +63,26 @@ const Profile = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }
+  function submitDelete() {
+    setDeleteModal(false);
+    setLoading(true);
+    API.post("/api/delete-member", {
+      userId: selectedMember,
+    })
+      .then((res) => {
+        setSuccess(ToastSuccess("Berhasil menghapus anggota"));
+        getProfile();
+      })
+      .catch((err) => {
+        setError(ToastError(err.response.data.message));
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }
   return (
-    <FrLayout2 error={error}>
+    <FrLayout2 error={error} success={success}>
       <Head>
         <title>RunRide | Profile</title>
         <meta name="description" content="Run ride description" />
@@ -72,10 +115,33 @@ const Profile = () => {
             </div>
           </div>
           <span className="fr-text-subhead-2 text-secondary font-medium">
-            Lorem Ipsum
+            {user.full_name}
           </span>
           <div className="bg-primary rounded-[50px] py-[10px] px-[20px] text-center mt-[10px] fr-text-body text-secondary font-medium">
             Strava ID {athleteId}
+          </div>
+        </div>
+
+        <div className={`modal ${deleteModal == true ? "modal-open" : ""}`}>
+          <div className="modal-box">
+            <h3 className="font-bold text-lg">Hapus Anggota</h3>
+            <p className="py-4">Yakin ingin menghapus anggota ini?</p>
+            <div className="modal-action">
+              <label
+                htmlFor="delete-modal"
+                className="btn btn-accent text-white"
+                onClick={() => setDeleteModal(false)}
+              >
+                Batal
+              </label>
+              <label
+                htmlFor="delete-modal"
+                className="btn btn-secondary text-white"
+                onClick={submitDelete}
+              >
+                Ya!
+              </label>
+            </div>
           </div>
         </div>
 
@@ -111,10 +177,10 @@ const Profile = () => {
                 </span>
                 <div
                   className={`w-fit fr-text-caption text-white rounded-full py-[7px] px-[12px] mt-[7px] ${
-                    group.qualified == 0 ? "bg-accent" : "bg-secondary"
+                    group.isReady ? "bg-secondary" : "bg-accent"
                   }`}
                 >
-                  {group.qualified == 0 ? "Belum Siap" : "Sudah Siap"}
+                  {group.isReady ? "Sudah Siap" : "Belum Siap"}
                 </div>
               </div>
               <FrText label="Nama Ketua" value={group.captain_name} />
@@ -122,16 +188,34 @@ const Profile = () => {
                 <span className="text-muted fr-text-body font-weight-medium">
                   Anggota
                 </span>
-                {member.map((m, index) => {
-                  return (
-                    <span
-                      key={index}
-                      className="fr-text-subhead-1 text-black font-weight-medium mt-[7px]"
-                    >
-                      {m.full_name}
-                    </span>
-                  );
-                })}
+                {member
+                  .filter((m) => m.full_name != group.captain_name)
+                  .map((m, index) => {
+                    return (
+                      <div
+                        key={index}
+                        className="flex justify-between items-center  mt-[7px] bg-[#FCFCFC] rounded-[5px] border border-[#E3E3E3] p-[15px]"
+                      >
+                        <span
+                          key={index}
+                          className="fr-text-subhead-1 text-black font-weight-medium"
+                        >
+                          {m.full_name}
+                        </span>
+                        <img
+                          htmlFor="delete-modal"
+                          className="w-[20px] h-[20px] cursor-pointer"
+                          src="/icons/ic_delete.svg"
+                          onClick={() => {
+                            setSelectedMember(m.id);
+                            setDeleteModal(!deleteModal);
+                          }}
+                        />
+                      </div>
+                    );
+                  })}
+                {member.filter((m) => m.full_name != group.captain_name)
+                  .length == 0 && <span>-</span>}
               </div>
             </div>
           </div>
