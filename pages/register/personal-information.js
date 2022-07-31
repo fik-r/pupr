@@ -227,7 +227,7 @@ const RegisterPersonalInformation = () => {
             <img src="/icons/ic_red_dot.svg" className="mr-[15px]" />
             <span className="fr-text-caption ">
               Saya menyetujui{" "}
-              <span className="text-accent">syarat dan ketentuan</span>
+              <span >syarat dan ketentuan</span>
             </span>
           </div>
         )}
