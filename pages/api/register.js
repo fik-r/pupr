@@ -1,6 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import knex from "../../utils/knex";
-import response from "../../utils/response";
+import response, { badRequest } from "../../utils/response";
 import constants from "../../utils/constants";
 import { uuid } from "uuidv4";
 import moment from "moment";
@@ -52,6 +52,35 @@ export default async function handler(req, res) {
         });
       }
 
+      if (teamId) {
+        const members = await knex("user_accounts")
+          .where("team_id", teamId)
+          .select("id");
+
+        const memberCount = members.length;
+        const maleMember = members.filter((member) => member.sex == "M");
+        const femaleMember = members.filter((member) => member.sex == "F");
+        const maleMemberCount = maleMember ? maleMember.length : 0;
+        const femaleMemberCount = femaleMember ? femaleMember.length : 0;
+        const maxMember = categoryId == "01.A" || categoryId == "01.B" ? 5 : 2;
+
+        const categoryType1Validation =
+          ((categoryId == "01.A" || categoryId == "01.B") &&
+            gender == "M" &&
+            maleMemberCount >= 3) ||
+          (gender == "F" && femaleMemberCount >= 2);
+
+        const categoryType2Validation =
+          (categoryId == "02" && gender == "M" && maleMemberCount >= 1) ||
+          (gender == "F" && femaleMemberCount >= 1);
+        if (categoryType1Validation || categoryType2Validation) {
+          return badRequest(
+            "Group sudah penuh, atau anda tidak memenuhi syarat.",
+            res
+          );
+        }
+      }
+
       await knex("user_accounts").insert({
         id: userId,
         full_name: fullName,
@@ -66,7 +95,6 @@ export default async function handler(req, res) {
         email: email,
         created_date: moment().utc().format("YYYY-MM-DD HH:mm:ss"),
       });
-
       const accessToken = await jwt.sign(
         {
           user_id: userId,
@@ -97,7 +125,6 @@ export default async function handler(req, res) {
         res
       );
     } catch (e) {
-      console.log(e);
       if (e.code == "ER_DUP_ENTRY" && e.sql.includes("insert into `team`")) {
         return response.error(500, "Nama group sudah digunakan", res);
       }

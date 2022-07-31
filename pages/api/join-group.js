@@ -24,7 +24,7 @@ export default async function handler(req, res) {
 
             const user = await knex("user_accounts")
               .where("id", decoded.user_id)
-              .select("team_id")
+              .select("team_id", "sex")
               .first();
             if (user && user.team_id) {
               return response.badRequest("User ini sudah punya team", res);
@@ -41,6 +41,39 @@ export default async function handler(req, res) {
                 created_date: moment().utc().format("YYYY-MM-DD HH:mm:ss"),
               });
             }
+
+            if (teamId) {
+              const members = await knex("user_accounts")
+                .where("team_id", teamId)
+                .select("id");
+
+              const memberCount = members.length;
+              const maleMember = members.filter((member) => member.sex == "M");
+              const femaleMember = members.filter(
+                (member) => member.sex == "F"
+              );
+              const maleMemberCount = maleMember ? maleMember.length : 0;
+              const femaleMemberCount = femaleMember ? femaleMember.length : 0;
+
+              const categoryType1Validation =
+                ((categoryId == "01.A" || categoryId == "01.B") &&
+                  user.sex == "M" &&
+                  maleMemberCount >= 3) ||
+                (user.sex == "F" && femaleMemberCount >= 2);
+
+              const categoryType2Validation =
+                (categoryId == "02" &&
+                  user.sex == "M" &&
+                  maleMemberCount >= 1) ||
+                (user.sex == "F" && femaleMemberCount >= 1);
+              if (categoryType1Validation || categoryType2Validation) {
+                return badRequest(
+                  "Group sudah penuh, atau anda tidak memenuhi syarat.",
+                  res
+                );
+              }
+            }
+
             await knex("user_accounts")
               .where("id", decoded.user_id)
               .update({
@@ -49,7 +82,6 @@ export default async function handler(req, res) {
 
             return response.ok("Successfully join group", {}, res);
           } catch (e) {
-            console.log(e);
             return response.error(500, "Internal server error", res);
           }
         }

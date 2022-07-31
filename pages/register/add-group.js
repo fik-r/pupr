@@ -34,7 +34,7 @@ const RegisterAddGroup = () => {
     const draftRegister =
       JSON.parse(localStorage.getItem(STORAGE_DRAFT_REGISTER)) || {};
     const accessToken = localStorage.getItem(ACCESS_TOKEN) || "";
-    if (accessToken) {
+    if (accessToken && !draftRegister.email) {
       API.post("/api/join-group", {
         teamName: groupName,
         categoryId: draftRegister.categoryId,

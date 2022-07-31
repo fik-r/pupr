@@ -32,7 +32,6 @@ export default function ExchangeToken(props) {
           getAthlete(access_token, refresh_token, expires_in, expires_at);
         })
         .catch((err) => {
-          console.log(err);
         });
     }
   }, []);

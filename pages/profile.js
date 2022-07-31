@@ -36,9 +36,6 @@ const Profile = () => {
     getProfile();
   }, []);
 
-  useEffect(() => {
-    console.log(deleteModal);
-  });
   function getProfile() {
     API.get("/api/profile")
       .then((res) => {

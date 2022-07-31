@@ -27,7 +27,7 @@ const RegisterChooseCategory = () => {
     const draftRegister =
       JSON.parse(localStorage.getItem(STORAGE_DRAFT_REGISTER)) || {};
 
-    if (!draftRegister.email && !localStorage.getItem(ACCESS_TOKEN)) {
+    if (!draftRegister.email || !localStorage.getItem(ACCESS_TOKEN)) {
       router.push("/");
     } else {
       setAge(moment().diff(draftRegister.dob, "years"));

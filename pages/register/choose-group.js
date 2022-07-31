@@ -12,7 +12,7 @@ import {
   ACCESS_TOKEN,
   REFRESH_TOKEN,
 } from "../../utils/constants";
-import InfiniteScroll from "react-infinite-scroll-component";
+import InfiniteScroll from "react-infinite-scroller";
 
 const RegisterChooseGroup = () => {
   const router = useRouter();
@@ -29,10 +29,10 @@ const RegisterChooseGroup = () => {
   useEffect(() => {
     const draftRegister =
       JSON.parse(localStorage.getItem(STORAGE_DRAFT_REGISTER)) || {};
-    if (!draftRegister.categoryId && !localStorage.getItem(accessToken)) {
+    if (!draftRegister.categoryId || !localStorage.getItem(ACCESS_TOKEN)) {
       router.push("/");
     } else {
-      getGroup();
+      // getGroup();
     }
   }, []);
 
@@ -51,7 +51,7 @@ const RegisterChooseGroup = () => {
       router.push("/");
     }
 
-    if (accessToken) {
+    if (accessToken && !draftRegister.email) {
       API.post("/api/join-group", {
         teamId: data.find((d) => d.selected == true).id,
         categoryId: draftRegister.categoryId,
@@ -160,8 +160,8 @@ const RegisterChooseGroup = () => {
         </div>
         {data.length > 0 && (
           <InfiniteScroll
-            dataLength={data.length} //This is important field to render the next data
-            next={getGroup}
+            pageStart={1} //This is important field to render the next data
+            loadMore={getGroup}
             hasMore={!noData}
             loader={
               <div className="pt-10">
@@ -199,17 +199,12 @@ const RegisterChooseGroup = () => {
                     draftRegister.categoryId == "01.B") &&
                     draftRegister.gender == "M" &&
                     maleMemberCount >= 3) ||
-                  (draftRegister.gender == "F" &&
-                    femaleMemberCount >= 2 &&
-                    memberCount > maxMember);
-
+                  (draftRegister.gender == "F" && femaleMemberCount >= 2);
                 const categoryType2Validation =
                   (draftRegister.categoryId == "02" &&
                     draftRegister.gender == "M" &&
                     maleMemberCount >= 1) ||
-                  (draftRegister.gender == "F" &&
-                    femaleMemberCount >= 1 &&
-                    memberCount > maxMember);
+                  (draftRegister.gender == "F" && femaleMemberCount >= 1);
                 let isDisabled =
                   categoryType1Validation || categoryType2Validation;
 

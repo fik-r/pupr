@@ -61,7 +61,6 @@ export default async function handler(req, res) {
                 res
               );
             } catch (e) {
-              console.log(e);
               return response.error(500, "Internal server error", res);
             }
           }

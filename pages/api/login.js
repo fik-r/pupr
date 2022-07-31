@@ -14,7 +14,6 @@ export default async function handler(req, res) {
       .first();
 
     if (!user) {
-      console.log(email);
       return response.unauthorized("Email atau Password salah", res);
     }
 
@@ -30,7 +29,6 @@ export default async function handler(req, res) {
           .select("athlete_id")
           .first()) || {};
 
-      console.log(athlete);
       const accessToken = await jwt.sign(
         {
           user_id: user.id,
@@ -52,7 +50,6 @@ export default async function handler(req, res) {
           expiresIn: "30d", // 30 hari
         }
       );
-      console.log(athlete)
       return response.ok(
         "Successfully login",
         {
@@ -63,7 +60,6 @@ export default async function handler(req, res) {
         res
       );
     } catch (e) {
-      console.log(e);
       return response.error(500, "Internal server error", res);
     }
   } else {
