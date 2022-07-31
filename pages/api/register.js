@@ -4,6 +4,8 @@ import response from "../../utils/response";
 import constants from "../../utils/constants";
 import { uuid } from "uuidv4";
 import moment from "moment";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 
 export default async function handler(req, res) {
   if (req.method == "POST") {
@@ -17,8 +19,12 @@ export default async function handler(req, res) {
       organization,
       categoryId,
       teamName,
+      email,
+      password,
     } = req.body;
     try {
+      if (!email) return response.badRequest("field email required", res);
+      if (!password) return response.badRequest("field password required", res);
       if (!fullName) return response.badRequest("field name required", res);
       if (!nip) return response.badRequest("field nip required", res);
       if (!dob) return response.badRequest("field dob required", res);
@@ -32,37 +38,61 @@ export default async function handler(req, res) {
       if (!teamId && !teamName)
         return response.badRequest("field teamId required", res);
       const userId = uuid();
+      var salt = bcrypt.genSaltSync(10);
+      var hashedPassword = bcrypt.hashSync(password, salt);
       var _teamId = "";
       if (teamName) {
-        const [id] = await knex("team")
-          .insert({
-            id: uuid(),
-            name: teamName,
-            user_id: userId,
-            created_date: moment().utc().format("YYYY-MM-DD HH:mm:ss"),
-          })
-          .returning("id");
-        _teamId = id;
+        _teamId = uuid();
+        await knex("team").insert({
+          id: _teamId,
+          name: teamName,
+          user_id: userId,
+          category: categoryId,
+          created_date: moment().utc().format("YYYY-MM-DD HH:mm:ss"),
+        });
       }
 
-      await knex("user_accounts")
-        .insert({
-          id: uuid(),
-          full_name: fullName,
-          team_id: teamId ? teamId : _teamId,
-          phone_number: phoneNumber,
-          dob: dob,
-          sex: gender,
-          organization: organization,
-          nip: nip,
-          created_date: moment().utc().format("YYYY-MM-DD HH:mm:ss"),
-        })
-        .returning("id");
+      await knex("user_accounts").insert({
+        id: userId,
+        full_name: fullName,
+        team_id: teamId ? teamId : _teamId,
+        phone_number: phoneNumber,
+        dob: dob,
+        age: moment().diff(dob, "years"),
+        sex: gender,
+        organization: organization,
+        nip: nip,
+        password: hashedPassword,
+        email: email,
+        created_date: moment().utc().format("YYYY-MM-DD HH:mm:ss"),
+      });
 
+      const accessToken = await jwt.sign(
+        {
+          user_id: userId,
+        },
+        process.env.ACCESS_TOKEN_SECRET_KEY,
+        {
+          algorithm: "HS512",
+          expiresIn: "300000", // 5 minutes
+        }
+      );
+
+      const refreshToken = await jwt.sign(
+        {
+          user_id: userId,
+        },
+        process.env.REFRESH_TOKEN_SECRET_KEY,
+        {
+          algorithm: "HS512",
+          expiresIn: "30d", // 30 hari
+        }
+      );
       return response.ok(
         "Successfully register",
         {
-          userId: userId,
+          accessToken: accessToken,
+          refreshToken: refreshToken,
         },
         res
       );

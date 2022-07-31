@@ -20,9 +20,8 @@ const RegisterChooseCategory = () => {
   const [age, setAge] = useState(0);
 
   useEffect(() => {
-    const draftRegister = JSON.parse(
-      localStorage.getItem(STORAGE_DRAFT_REGISTER)
-    );
+    const draftRegister =
+      JSON.parse(localStorage.getItem(STORAGE_DRAFT_REGISTER)) || {};
     setAge(moment().diff(draftRegister.dob, "years"));
   });
 
@@ -31,9 +30,8 @@ const RegisterChooseCategory = () => {
 
   function handleNext() {
     if (isNextBtnDisabled) return;
-    const draftRegister = JSON.parse(
-      localStorage.getItem(STORAGE_DRAFT_REGISTER)
-    );
+    const draftRegister =
+      JSON.parse(localStorage.getItem(STORAGE_DRAFT_REGISTER)) || {};
     localStorage.setItem(
       STORAGE_DRAFT_REGISTER,
       JSON.stringify({
@@ -62,12 +60,11 @@ const RegisterChooseCategory = () => {
         <div className="grid grid-cols-3 w-[748px] mobile:w-[236px] mobile:flex mobile:flex-col mobile:items-center mx-auto justify-center gap-x-3 mobile:gap-y-2">
           {listCategory.map((category, index) => {
             const isDisabled =
-              category.title == "03"
+              category.title == "02"
                 ? false
-                : category.title == "01.A" || category.title == "02"
+                : category.title == "01.A"
                 ? age > 40
                 : age <= 40;
-            console.log(isDisabled);
             return (
               <FrCardCategory
                 key={index}

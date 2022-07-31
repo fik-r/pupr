@@ -1,161 +1,112 @@
-"use strict";
+/*
+ * ATTENTION: An "eval-source-map" devtool has been used.
+ * This devtool is neither made for production nor for readable output files.
+ * It uses "eval()" calls to create a separate source file with attached SourceMaps in the browser devtools.
+ * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
+ * or disable the default devtool with "devtool: false".
+ * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
+ */
 (() => {
 var exports = {};
-exports.id = 553;
-exports.ids = [553];
+exports.id = "pages/api/register";
+exports.ids = ["pages/api/register"];
 exports.modules = {
 
-/***/ 514:
+/***/ "bcryptjs":
+/*!***************************!*\
+  !*** external "bcryptjs" ***!
+  \***************************/
 /***/ ((module) => {
 
+"use strict";
+module.exports = require("bcryptjs");
+
+/***/ }),
+
+/***/ "jsonwebtoken":
+/*!*******************************!*\
+  !*** external "jsonwebtoken" ***!
+  \*******************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("jsonwebtoken");
+
+/***/ }),
+
+/***/ "knex":
+/*!***********************!*\
+  !*** external "knex" ***!
+  \***********************/
+/***/ ((module) => {
+
+"use strict";
 module.exports = require("knex");
 
 /***/ }),
 
-/***/ 245:
+/***/ "moment":
+/*!*************************!*\
+  !*** external "moment" ***!
+  \*************************/
 /***/ ((module) => {
 
+"use strict";
 module.exports = require("moment");
 
 /***/ }),
 
-/***/ 398:
+/***/ "uuidv4":
+/*!*************************!*\
+  !*** external "uuidv4" ***!
+  \*************************/
 /***/ ((module) => {
 
+"use strict";
 module.exports = require("uuidv4");
 
 /***/ }),
 
-/***/ 361:
+/***/ "(api)/./pages/api/register.js":
+/*!*******************************!*\
+  !*** ./pages/api/register.js ***!
+  \*******************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-// ESM COMPAT FLAG
-__webpack_require__.r(__webpack_exports__);
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ handler)\n/* harmony export */ });\n/* harmony import */ var _utils_knex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../utils/knex */ \"(api)/./utils/knex.js\");\n/* harmony import */ var _utils_knex__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_utils_knex__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _utils_response__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utils/response */ \"(api)/./utils/response.js\");\n/* harmony import */ var _utils_constants__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utils/constants */ \"(api)/./utils/constants.js\");\n/* harmony import */ var uuidv4__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! uuidv4 */ \"uuidv4\");\n/* harmony import */ var uuidv4__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(uuidv4__WEBPACK_IMPORTED_MODULE_3__);\n/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! moment */ \"moment\");\n/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_4__);\n/* harmony import */ var jsonwebtoken__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! jsonwebtoken */ \"jsonwebtoken\");\n/* harmony import */ var jsonwebtoken__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(jsonwebtoken__WEBPACK_IMPORTED_MODULE_5__);\n/* harmony import */ var bcryptjs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! bcryptjs */ \"bcryptjs\");\n/* harmony import */ var bcryptjs__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(bcryptjs__WEBPACK_IMPORTED_MODULE_6__);\n// Next.js API route support: https://nextjs.org/docs/api-routes/introduction\n\n\n\n\n\n\n\nasync function handler(req, res) {\n    if (req.method == \"POST\") {\n        const { fullName , nip , dob , gender , phoneNumber , teamId , organization , categoryId , teamName , email , password ,  } = req.body;\n        try {\n            if (!email) return _utils_response__WEBPACK_IMPORTED_MODULE_1__.badRequest(\"field email required\", res);\n            if (!password) return _utils_response__WEBPACK_IMPORTED_MODULE_1__.badRequest(\"field password required\", res);\n            if (!fullName) return _utils_response__WEBPACK_IMPORTED_MODULE_1__.badRequest(\"field name required\", res);\n            if (!nip) return _utils_response__WEBPACK_IMPORTED_MODULE_1__.badRequest(\"field nip required\", res);\n            if (!dob) return _utils_response__WEBPACK_IMPORTED_MODULE_1__.badRequest(\"field dob required\", res);\n            if (!gender) return _utils_response__WEBPACK_IMPORTED_MODULE_1__.badRequest(\"field gender required\", res);\n            if (!phoneNumber) return _utils_response__WEBPACK_IMPORTED_MODULE_1__.badRequest(\"field phoneNumber required\", res);\n            if (!organization) return _utils_response__WEBPACK_IMPORTED_MODULE_1__.badRequest(\"field organization required\", res);\n            if (!categoryId && !_utils_constants__WEBPACK_IMPORTED_MODULE_2__[\"default\"].includes(category)) return _utils_response__WEBPACK_IMPORTED_MODULE_1__.badRequest(\"field categoryId invalid\", res);\n            if (!teamId && !teamName) return _utils_response__WEBPACK_IMPORTED_MODULE_1__.badRequest(\"field teamId required\", res);\n            const userId = (0,uuidv4__WEBPACK_IMPORTED_MODULE_3__.uuid)();\n            var salt = bcryptjs__WEBPACK_IMPORTED_MODULE_6___default().genSaltSync(10);\n            var hashedPassword = bcryptjs__WEBPACK_IMPORTED_MODULE_6___default().hashSync(password, salt);\n            var _teamId = \"\";\n            if (teamName) {\n                _teamId = (0,uuidv4__WEBPACK_IMPORTED_MODULE_3__.uuid)();\n                await _utils_knex__WEBPACK_IMPORTED_MODULE_0___default()(\"team\").insert({\n                    id: _teamId,\n                    name: teamName,\n                    user_id: userId,\n                    category: categoryId,\n                    created_date: moment__WEBPACK_IMPORTED_MODULE_4___default()().utc().format(\"YYYY-MM-DD HH:mm:ss\")\n                });\n            }\n            await _utils_knex__WEBPACK_IMPORTED_MODULE_0___default()(\"user_accounts\").insert({\n                id: (0,uuidv4__WEBPACK_IMPORTED_MODULE_3__.uuid)(),\n                full_name: fullName,\n                team_id: teamId ? teamId : _teamId,\n                phone_number: phoneNumber,\n                dob: dob,\n                age: moment__WEBPACK_IMPORTED_MODULE_4___default()().diff(dob, \"years\"),\n                sex: gender,\n                organization: organization,\n                nip: nip,\n                password: hashedPassword,\n                email: email,\n                created_date: moment__WEBPACK_IMPORTED_MODULE_4___default()().utc().format(\"YYYY-MM-DD HH:mm:ss\")\n            }).returning(\"id\");\n            const accessToken = await jsonwebtoken__WEBPACK_IMPORTED_MODULE_5___default().sign({\n                user_id: userId\n            }, process.env.ACCESS_TOKEN_SECRET_KEY, {\n                algorithm: \"HS512\",\n                expiresIn: \"300000\"\n            });\n            const refreshToken = await jsonwebtoken__WEBPACK_IMPORTED_MODULE_5___default().sign({\n                user_id: userId\n            }, process.env.REFRESH_TOKEN_SECRET_KEY, {\n                algorithm: \"HS512\",\n                expiresIn: \"30d\"\n            });\n            return _utils_response__WEBPACK_IMPORTED_MODULE_1__.ok(\"Successfully register\", {\n                accessToken: accessToken,\n                refreshToken: refreshToken\n            }, res);\n        } catch (e) {\n            console.log(e);\n            if (e.code == \"ER_DUP_ENTRY\" && e.sql.includes(\"insert into `team`\")) {\n                return _utils_response__WEBPACK_IMPORTED_MODULE_1__.error(500, \"Nama group sudah digunakan\", res);\n            }\n            return _utils_response__WEBPACK_IMPORTED_MODULE_1__.error(500, \"Internal server error\", res);\n        }\n    } else {\n        return _utils_response__WEBPACK_IMPORTED_MODULE_1__.notFound(\"wrong route api\", res);\n    }\n};\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,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SSxJQUFJLGNBQWMsSUFBSUgsQ0FBQyxDQUFDSSxHQUFHLENBQUNwQyxRQUFRLENBQUMsb0JBQW9CLENBQUMsRUFBRTtnQkFDcEUsT0FBT3ZCLGtEQUFjLENBQUMsR0FBRyxFQUFFLDRCQUE0QixFQUFFUSxHQUFHLENBQUMsQ0FBQzthQUMvRDtZQUNELE9BQU9SLGtEQUFjLENBQUMsR0FBRyxFQUFFLHVCQUF1QixFQUFFUSxHQUFHLENBQUMsQ0FBQztTQUMxRDtLQUNGLE1BQU07UUFDTCxPQUFPUixxREFBaUIsQ0FBQyxpQkFBaUIsRUFBRVEsR0FBRyxDQUFDLENBQUM7S0FDbEQ7Q0FDRiIsInNvdXJjZXMiOlsid2VicGFjazovL3J1bnJpZGUvLi9wYWdlcy9hcGkvcmVnaXN0ZXIuanM/MTc0NiJdLCJzb3VyY2VzQ29udGVudCI6WyIvLyBOZXh0LmpzIEFQSSByb3V0ZSBzdXBwb3J0OiBodHRwczovL25leHRqcy5vcmcvZG9jcy9hcGktcm91dGVzL2ludHJvZHVjdGlvblxuaW1wb3J0IGtuZXggZnJvbSBcIi4uLy4uL3V0aWxzL2tuZXhcIjtcbmltcG9ydCByZXNwb25zZSBmcm9tIFwiLi4vLi4vdXRpbHMvcmVzcG9uc2VcIjtcbmltcG9ydCBjb25zdGFudHMgZnJvbSBcIi4uLy4uL3V0aWxzL2NvbnN0YW50c1wiO1xuaW1wb3J0IHsgdXVpZCB9IGZyb20gXCJ1dWlkdjRcIjtcbmltcG9ydCBtb21lbnQgZnJvbSBcIm1vbWVudFwiO1xuaW1wb3J0IGp3dCBmcm9tIFwianNvbndlYnRva2VuXCI7XG5pbXBvcnQgYmNyeXB0IGZyb20gXCJiY3J5cHRqc1wiO1xuXG5leHBvcnQgZGVmYXVsdCBhc3luYyBmdW5jdGlvbiBoYW5kbGVyKHJlcSwgcmVzKSB7XG4gIGlmIChyZXEubWV0aG9kID09IFwiUE9TVFwiKSB7XG4gICAgY29uc3Qge1xuICAgICAgZnVsbE5hbWUsXG4gICAgICBuaXAsXG4gICAgICBkb2IsXG4gICAgICBnZW5kZXIsXG4gICAgICBwaG9uZU51bWJlcixcbiAgICAgIHRlYW1JZCxcbiAgICAgIG9yZ2FuaXphdGlvbixcbiAgICAgIGNhdGVnb3J5SWQsXG4gICAgICB0ZWFtTmFtZSxcbiAgICAgIGVtYWlsLFxuICAgICAgcGFzc3dvcmQsXG4gICAgfSA9IHJlcS5ib2R5O1xuICAgIHRyeSB7XG4gICAgICBpZiAoIWVtYWlsKSByZXR1cm4gcmVzcG9uc2UuYmFkUmVxdWVzdChcImZpZWxkIGVtYWlsIHJlcXVpcmVkXCIsIHJlcyk7XG4gICAgICBpZiAoIXBhc3N3b3JkKSByZXR1cm4gcmVzcG9uc2UuYmFkUmVxdWVzdChcImZpZWxkIHBhc3N3b3JkIHJlcXVpcmVkXCIsIHJlcyk7XG4gICAgICBpZiAoIWZ1bGxOYW1lKSByZXR1cm4gcmVzcG9uc2UuYmFkUmVxdWVzdChcImZpZWxkIG5hbWUgcmVxdWlyZWRcIiwgcmVzKTtcbiAgICAgIGlmICghbmlwKSByZXR1cm4gcmVzcG9uc2UuYmFkUmVxdWVzdChcImZpZWxkIG5pcCByZXF1aXJlZFwiLCByZXMpO1xuICAgICAgaWYgKCFkb2IpIHJldHVybiByZXNwb25zZS5iYWRSZXF1ZXN0KFwiZmllbGQgZG9iIHJlcXVpcmVkXCIsIHJlcyk7XG4gICAgICBpZiAoIWdlbmRlcikgcmV0dXJuIHJlc3BvbnNlLmJhZFJlcXVlc3QoXCJmaWVsZCBnZW5kZXIgcmVxdWlyZWRcIiwgcmVzKTtcbiAgICAgIGlmICghcGhvbmVOdW1iZXIpXG4gICAgICAgIHJldHVybiByZXNwb25zZS5iYWRSZXF1ZXN0KFwiZmllbGQgcGhvbmVOdW1iZXIgcmVxdWlyZWRcIiwgcmVzKTtcbiAgICAgIGlmICghb3JnYW5pemF0aW9uKVxuICAgICAgICByZXR1cm4gcmVzcG9uc2UuYmFkUmVxdWVzdChcImZpZWxkIG9yZ2FuaXphdGlvbiByZXF1aXJlZFwiLCByZXMpO1xuICAgICAgaWYgKCFjYXRlZ29yeUlkICYmICFjb25zdGFudHMuaW5jbHVkZXMoY2F0ZWdvcnkpKVxuICAgICAgICByZXR1cm4gcmVzcG9uc2UuYmFkUmVxdWVzdChcImZpZWxkIGNhdGVnb3J5SWQgaW52YWxpZFwiLCByZXMpO1xuICAgICAgaWYgKCF0ZWFtSWQgJiYgIXRlYW1OYW1lKVxuICAgICAgICByZXR1cm4gcmVzcG9uc2UuYmFkUmVxdWVzdChcImZpZWxkIHRlYW1JZCByZXF1aXJlZFwiLCByZXMpO1xuICAgICAgY29uc3QgdXNlcklkID0gdXVpZCgpO1xuICAgICAgdmFyIHNhbHQgPSBiY3J5cHQuZ2VuU2FsdFN5bmMoMTApO1xuICAgICAgdmFyIGhhc2hlZFBhc3N3b3JkID0gYmNyeXB0Lmhhc2hTeW5jKHBhc3N3b3JkLCBzYWx0KTtcbiAgICAgIHZhciBfdGVhbUlkID0gXCJcIjtcbiAgICAgIGlmICh0ZWFtTmFtZSkge1xuICAgICAgICBfdGVhbUlkID0gdXVpZCgpO1xuICAgICAgICBhd2FpdCBrbmV4KFwidGVhbVwiKS5pbnNlcnQoe1xuICAgICAgICAgIGlkOiBfdGVhbUlkLFxuICAgICAgICAgIG5hbWU6IHRlYW1OYW1lLFxuICAgICAgICAgIHVzZXJfaWQ6IHVzZXJJZCxcbiAgICAgICAgICBjYXRlZ29yeTogY2F0ZWdvcnlJZCxcbiAgICAgICAgICBjcmVhdGVkX2RhdGU6IG1vbWVudCgpLnV0YygpLmZvcm1hdChcIllZWVktTU0tREQgSEg6bW06c3NcIiksXG4gICAgICAgIH0pO1xuICAgICAgfVxuXG4gICAgICBhd2FpdCBrbmV4KFwidXNlcl9hY2NvdW50c1wiKVxuICAgICAgICAuaW5zZXJ0KHtcbiAgICAgICAgICBpZDogdXVpZCgpLFxuICAgICAgICAgIGZ1bGxfbmFtZTogZnVsbE5hbWUsXG4gICAgICAgICAgdGVhbV9pZDogdGVhbUlkID8gdGVhbUlkIDogX3RlYW1JZCxcbiAgICAgICAgICBwaG9uZV9udW1iZXI6IHBob25lTnVtYmVyLFxuICAgICAgICAgIGRvYjogZG9iLFxuICAgICAgICAgIGFnZTogbW9tZW50KCkuZGlmZihkb2IsIFwieWVhcnNcIiksXG4gICAgICAgICAgc2V4OiBnZW5kZXIsXG4gICAgICAgICAgb3JnYW5pemF0aW9uOiBvcmdhbml6YXRpb24sXG4gICAgICAgICAgbmlwOiBuaXAsXG4gICAgICAgICAgcGFzc3dvcmQ6IGhhc2hlZFBhc3N3b3JkLFxuICAgICAgICAgIGVtYWlsOiBlbWFpbCxcbiAgICAgICAgICBjcmVhdGVkX2RhdGU6IG1vbWVudCgpLnV0YygpLmZvcm1hdChcIllZWVktTU0tREQgSEg6bW06c3NcIiksXG4gICAgICAgIH0pXG4gICAgICAgIC5yZXR1cm5pbmcoXCJpZFwiKTtcblxuICAgICAgY29uc3QgYWNjZXNzVG9rZW4gPSBhd2FpdCBqd3Quc2lnbihcbiAgICAgICAge1xuICAgICAgICAgIHVzZXJfaWQ6IHVzZXJJZCxcbiAgICAgICAgfSxcbiAgICAgICAgcHJvY2Vzcy5lbnYuQUNDRVNTX1RPS0VOX1NFQ1JFVF9LRVksXG4gICAgICAgIHtcbiAgICAgICAgICBhbGdvcml0aG06IFwiSFM1MTJcIixcbiAgICAgICAgICBleHBpcmVzSW46IFwiMzAwMDAwXCIsIC8vIDUgbWludXRlc1xuICAgICAgICB9XG4gICAgICApO1xuXG4gICAgICBjb25zdCByZWZyZXNoVG9rZW4gPSBhd2FpdCBqd3Quc2lnbihcbiAgICAgICAge1xuICAgICAgICAgIHVzZXJfaWQ6IHVzZXJJZCxcbiAgICAgICAgfSxcbiAgICAgICAgcHJvY2Vzcy5lbnYuUkVGUkVTSF9UT0tFTl9TRUNSRVRfS0VZLFxuICAgICAgICB7XG4gICAgICAgICAgYWxnb3JpdGhtOiBcIkhTNTEyXCIsXG4gICAgICAgICAgZXhwaXJlc0luOiBcIjMwZFwiLCAvLyAzMCBoYXJpXG4gICAgICAgIH1cbiAgICAgICk7XG4gICAgICByZXR1cm4gcmVzcG9uc2Uub2soXG4gICAgICAgIFwiU3VjY2Vzc2Z1bGx5IHJlZ2lzdGVyXCIsXG4gICAgICAgIHtcbiAgICAgICAgICBhY2Nlc3NUb2tlbjogYWNjZXNzVG9rZW4sXG4gICAgICAgICAgcmVmcmVzaFRva2VuOiByZWZyZXNoVG9rZW4sXG4gICAgICAgIH0sXG4gICAgICAgIHJlc1xuICAgICAgKTtcbiAgICB9IGNhdGNoIChlKSB7XG4gICAgICBjb25zb2xlLmxvZyhlKTtcbiAgICAgIGlmIChlLmNvZGUgPT0gXCJFUl9EVVBfRU5UUllcIiAmJiBlLnNxbC5pbmNsdWRlcyhcImluc2VydCBpbnRvIGB0ZWFtYFwiKSkge1xuICAgICAgICByZXR1cm4gcmVzcG9uc2UuZXJyb3IoNTAwLCBcIk5hbWEgZ3JvdXAgc3VkYWggZGlndW5ha2FuXCIsIHJlcyk7XG4gICAgICB9XG4gICAgICByZXR1cm4gcmVzcG9uc2UuZXJyb3IoNTAwLCBcIkludGVybmFsIHNlcnZlciBlcnJvclwiLCByZXMpO1xuICAgIH1cbiAgfSBlbHNlIHtcbiAgICByZXR1cm4gcmVzcG9uc2Uubm90Rm91bmQoXCJ3cm9uZyByb3V0ZSBhcGlcIiwgcmVzKTtcbiAgfVxufVxuIl0sIm5hbWVzIjpbImtuZXgiLCJyZXNwb25zZSIsImNvbnN0YW50cyIsInV1aWQiLCJtb21lbnQiLCJqd3QiLCJiY3J5cHQiLCJoYW5kbGVyIiwicmVxIiwicmVzIiwibWV0aG9kIiwiZnVsbE5hbWUiLCJuaXAiLCJkb2IiLCJnZW5kZXIiLCJwaG9uZU51bWJlciIsInRlYW1JZCIsIm9yZ2FuaXphdGlvbiIsImNhdGVnb3J5SWQiLCJ0ZWFtTmFtZSIsImVtYWlsIiwicGFzc3dvcmQiLCJib2R5IiwiYmFkUmVxdWVzdCIsImluY2x1ZGVzIiwiY2F0ZWdvcnkiLCJ1c2VySWQiLCJzYWx0IiwiZ2VuU2FsdFN5bmMiLCJoYXNoZWRQYXNzd29yZCIsImhhc2hTeW5jIiwiX3RlYW1JZCIsImluc2VydCIsImlkIiwibmFtZSIsInVzZXJfaWQiLCJjcmVhdGVkX2RhdGUiLCJ1dGMiLCJmb3JtYXQiLCJmdWxsX25hbWUiLCJ0ZWFtX2lkIiwicGhvbmVfbnVtYmVyIiwiYWdlIiwiZGlmZiIsInNleCIsInJldHVybmluZyIsImFjY2Vzc1Rva2VuIiwic2lnbiIsInByb2Nlc3MiLCJlbnYiLCJBQ0NFU1NfVE9LRU5fU0VDUkVUX0tFWSIsImFsZ29yaXRobSIsImV4cGlyZXNJbiIsInJlZnJlc2hUb2tlbiIsIlJFRlJFU0hfVE9LRU5fU0VDUkVUX0tFWSIsIm9rIiwiZSIsImNvbnNvbGUiLCJsb2ciLCJjb2RlIiwic3FsIiwiZXJyb3IiLCJub3RGb3VuZCJdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///(api)/./pages/api/register.js\n");
 
-// EXPORTS
-__webpack_require__.d(__webpack_exports__, {
-  "default": () => (/* binding */ handler)
-});
+/***/ }),
 
-// NAMESPACE OBJECT: ./utils/constants.js
-var constants_namespaceObject = {};
-__webpack_require__.r(constants_namespaceObject);
+/***/ "(api)/./utils/constants.js":
+/*!****************************!*\
+  !*** ./utils/constants.js ***!
+  \****************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-// EXTERNAL MODULE: ./utils/knex.js
-var knex = __webpack_require__(458);
-var knex_default = /*#__PURE__*/__webpack_require__.n(knex);
-// EXTERNAL MODULE: ./utils/response.js
-var response = __webpack_require__(956);
-;// CONCATENATED MODULE: ./utils/constants.js
-const LIST_CATEGORY = [
-    {
-        title: "01.A",
-        category: "RUN",
-        rules: [
-            "Tim",
-            "Komponen Tim (5 Anggota dengan 3 Pria dan 2 Wanita)",
-            "Usia ≤ 40 Tahun",
-            "Total Jarak 77 km per-tim", 
-        ]
-    },
-    {
-        title: "01.B",
-        category: "RUN",
-        rules: [
-            "Tim",
-            "Komponen Tim (5 Anggota dengan 3 Pria dan 2 Wanita)",
-            "Usia > 40 Tahun",
-            "Total Jarak 77 km per-tim", 
-        ]
-    },
-    {
-        title: "02",
-        category: "RIDE",
-        rules: [
-            "Tim",
-            "Komponen Tim (1 Pria dan 1 Wanita)",
-            "Total Jarak 77 km per-tim", 
-        ]
-    }, 
-];
-const LIST_UNIT_ORGANIZATION = (/* unused pure expression or super */ null && ([
-    "Sekretariat Jenderal",
-    "Inspektorat Jenderal",
-    "Direktorat Jenderal Bina Marga",
-    "Direktorat Jenderal Sumber Daya Air",
-    "Direktorat Jenderal Cipta Karya",
-    "Direktorat Jenderal Perumahan",
-    "Direktorat Jenderal Bina Konstruksi",
-    "Direktorat Jenderal Pembiayaan Infrastruktur",
-    "Badan Pengembangan Infrastruktur Wilayah",
-    "Badan Pengembangan Sumber Daya Manusia",
-    "Badan Pengatur Jalan Tol",
-    "Lembaga Pengembangan Jasa Konstruksi", 
-]));
-const STORAGE_DRAFT_REGISTER = "DRAFT_REGISTER";
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"ACCESS_TOKEN\": () => (/* binding */ ACCESS_TOKEN),\n/* harmony export */   \"ATHLETE_ID\": () => (/* binding */ ATHLETE_ID),\n/* harmony export */   \"LIST_CATEGORY\": () => (/* binding */ LIST_CATEGORY),\n/* harmony export */   \"LIST_UNIT_ORGANIZATION\": () => (/* binding */ LIST_UNIT_ORGANIZATION),\n/* harmony export */   \"REFRESH_TOKEN\": () => (/* binding */ REFRESH_TOKEN),\n/* harmony export */   \"STORAGE_DRAFT_REGISTER\": () => (/* binding */ STORAGE_DRAFT_REGISTER)\n/* harmony export */ });\nconst LIST_CATEGORY = [\n    {\n        title: \"01.A\",\n        category: \"RUN\",\n        rules: [\n            \"Tim\",\n            \"Komponen Tim (5 Anggota dengan 3 Pria dan 2 Wanita)\",\n            \"Usia ≤ 40 Tahun\",\n            \"Total Jarak 77 km per-tim\", \n        ]\n    },\n    {\n        title: \"01.B\",\n        category: \"RUN\",\n        rules: [\n            \"Tim\",\n            \"Komponen Tim (5 Anggota dengan 3 Pria dan 2 Wanita)\",\n            \"Usia > 40 Tahun\",\n            \"Total Jarak 77 km per-tim\", \n        ]\n    },\n    {\n        title: \"02\",\n        category: \"RIDE\",\n        rules: [\n            \"Tim\",\n            \"Komponen Tim (1 Pria dan 1 Wanita)\",\n            \"Total Jarak 77 km per-tim\", \n        ]\n    }, \n];\nconst LIST_UNIT_ORGANIZATION = [\n    \"Sekretariat Jenderal\",\n    \"Inspektorat Jenderal\",\n    \"Direktorat Jenderal Bina Marga\",\n    \"Direktorat Jenderal Sumber Daya Air\",\n    \"Direktorat Jenderal Cipta Karya\",\n    \"Direktorat Jenderal Perumahan\",\n    \"Direktorat Jenderal Bina Konstruksi\",\n    \"Direktorat Jenderal Pembiayaan Infrastruktur\",\n    \"Badan Pengembangan Infrastruktur Wilayah\",\n    \"Badan Pengembangan Sumber Daya Manusia\",\n    \"Badan Pengatur Jalan Tol\",\n    \"Lembaga Pengembangan Jasa Konstruksi\", \n];\nconst STORAGE_DRAFT_REGISTER = \"DRAFT_REGISTER\";\nconst ACCESS_TOKEN = \"ACCESS_TOKEN\";\nconst REFRESH_TOKEN = \"REFRESH_TOKEN\";\nconst ATHLETE_ID = \"ATHLETE_ID\";\n\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKGFwaSkvLi91dGlscy9jb25zdGFudHMuanMuanMiLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7O0FBQUEsTUFBTUEsYUFBYSxHQUFHO0lBQ3BCO1FBQ0VDLEtBQUssRUFBRSxNQUFNO1FBQ2JDLFFBQVEsRUFBRSxLQUFLO1FBQ2ZDLEtBQUssRUFBRTtZQUNMLEtBQUs7WUFDTCxxREFBcUQ7WUFDckQsaUJBQWlCO1lBQ2pCLDJCQUEyQjtTQUM1QjtLQUNGO0lBQ0Q7UUFDRUYsS0FBSyxFQUFFLE1BQU07UUFDYkMsUUFBUSxFQUFFLEtBQUs7UUFDZkMsS0FBSyxFQUFFO1lBQ0wsS0FBSztZQUNMLHFEQUFxRDtZQUNyRCxpQkFBaUI7WUFDakIsMkJBQTJCO1NBQzVCO0tBQ0Y7SUFDRDtRQUNFRixLQUFLLEVBQUUsSUFBSTtRQUNYQyxRQUFRLEVBQUUsTUFBTTtRQUNoQkMsS0FBSyxFQUFFO1lBQ0wsS0FBSztZQUNMLG9DQUFvQztZQUNwQywyQkFBMkI7U0FDNUI7S0FDRjtDQUNGO0FBQ0QsTUFBTUMsc0JBQXNCLEdBQUc7SUFDN0Isc0JBQXNCO0lBQ3RCLHNCQUFzQjtJQUN0QixnQ0FBZ0M7SUFDaEMscUNBQXFDO0lBQ3JDLGlDQUFpQztJQUNqQywrQkFBK0I7SUFDL0IscUNBQXFDO0lBQ3JDLDhDQUE4QztJQUM5QywwQ0FBMEM7SUFDMUMsd0NBQXdDO0lBQ3hDLDBCQUEwQjtJQUMxQixzQ0FBc0M7Q0FDdkM7QUFDRCxNQUFNQyxzQkFBc0IsR0FBRyxnQkFBZ0I7QUFDL0MsTUFBTUMsWUFBWSxHQUFHLGNBQWM7QUFDbkMsTUFBTUMsYUFBYSxHQUFHLGVBQWU7QUFDckMsTUFBTUMsVUFBVSxHQUFHLFlBQVk7QUFFbUYiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9ydW5yaWRlLy4vdXRpbHMvY29uc3RhbnRzLmpzP2Y5YjQiXSwic291cmNlc0NvbnRlbnQiOlsiY29uc3QgTElTVF9DQVRFR09SWSA9IFtcbiAge1xuICAgIHRpdGxlOiBcIjAxLkFcIixcbiAgICBjYXRlZ29yeTogXCJSVU5cIixcbiAgICBydWxlczogW1xuICAgICAgXCJUaW1cIixcbiAgICAgIFwiS29tcG9uZW4gVGltICg1IEFuZ2dvdGEgZGVuZ2FuIDMgUHJpYSBkYW4gMiBXYW5pdGEpXCIsXG4gICAgICBcIlVzaWEg4omkIDQwIFRhaHVuXCIsXG4gICAgICBcIlRvdGFsIEphcmFrIDc3IGttIHBlci10aW1cIixcbiAgICBdLFxuICB9LFxuICB7XG4gICAgdGl0bGU6IFwiMDEuQlwiLFxuICAgIGNhdGVnb3J5OiBcIlJVTlwiLFxuICAgIHJ1bGVzOiBbXG4gICAgICBcIlRpbVwiLFxuICAgICAgXCJLb21wb25lbiBUaW0gKDUgQW5nZ290YSBkZW5nYW4gMyBQcmlhIGRhbiAyIFdhbml0YSlcIixcbiAgICAgIFwiVXNpYSA+IDQwIFRhaHVuXCIsXG4gICAgICBcIlRvdGFsIEphcmFrIDc3IGttIHBlci10aW1cIixcbiAgICBdLFxuICB9LFxuICB7XG4gICAgdGl0bGU6IFwiMDJcIixcbiAgICBjYXRlZ29yeTogXCJSSURFXCIsXG4gICAgcnVsZXM6IFtcbiAgICAgIFwiVGltXCIsXG4gICAgICBcIktvbXBvbmVuIFRpbSAoMSBQcmlhIGRhbiAxIFdhbml0YSlcIixcbiAgICAgIFwiVG90YWwgSmFyYWsgNzcga20gcGVyLXRpbVwiLFxuICAgIF0sXG4gIH0sXG5dO1xuY29uc3QgTElTVF9VTklUX09SR0FOSVpBVElPTiA9IFtcbiAgXCJTZWtyZXRhcmlhdCBKZW5kZXJhbFwiLFxuICBcIkluc3Bla3RvcmF0IEplbmRlcmFsXCIsXG4gIFwiRGlyZWt0b3JhdCBKZW5kZXJhbCBCaW5hIE1hcmdhXCIsXG4gIFwiRGlyZWt0b3JhdCBKZW5kZXJhbCBTdW1iZXIgRGF5YSBBaXJcIixcbiAgXCJEaXJla3RvcmF0IEplbmRlcmFsIENpcHRhIEthcnlhXCIsXG4gIFwiRGlyZWt0b3JhdCBKZW5kZXJhbCBQZXJ1bWFoYW5cIixcbiAgXCJEaXJla3RvcmF0IEplbmRlcmFsIEJpbmEgS29uc3RydWtzaVwiLFxuICBcIkRpcmVrdG9yYXQgSmVuZGVyYWwgUGVtYmlheWFhbiBJbmZyYXN0cnVrdHVyXCIsXG4gIFwiQmFkYW4gUGVuZ2VtYmFuZ2FuIEluZnJhc3RydWt0dXIgV2lsYXlhaFwiLFxuICBcIkJhZGFuIFBlbmdlbWJhbmdhbiBTdW1iZXIgRGF5YSBNYW51c2lhXCIsXG4gIFwiQmFkYW4gUGVuZ2F0dXIgSmFsYW4gVG9sXCIsXG4gIFwiTGVtYmFnYSBQZW5nZW1iYW5nYW4gSmFzYSBLb25zdHJ1a3NpXCIsXG5dO1xuY29uc3QgU1RPUkFHRV9EUkFGVF9SRUdJU1RFUiA9IFwiRFJBRlRfUkVHSVNURVJcIjtcbmNvbnN0IEFDQ0VTU19UT0tFTiA9IFwiQUNDRVNTX1RPS0VOXCI7XG5jb25zdCBSRUZSRVNIX1RPS0VOID0gXCJSRUZSRVNIX1RPS0VOXCI7XG5jb25zdCBBVEhMRVRFX0lEID0gXCJBVEhMRVRFX0lEXCI7XG5cbmV4cG9ydCB7IExJU1RfVU5JVF9PUkdBTklaQVRJT04sIExJU1RfQ0FURUdPUlksIFNUT1JBR0VfRFJBRlRfUkVHSVNURVIsIEFDQ0VTU19UT0tFTiwgUkVGUkVTSF9UT0tFTiwgQVRITEVURV9JRCB9O1xuIl0sIm5hbWVzIjpbIkxJU1RfQ0FURUdPUlkiLCJ0aXRsZSIsImNhdGVnb3J5IiwicnVsZXMiLCJMSVNUX1VOSVRfT1JHQU5JWkFUSU9OIiwiU1RPUkFHRV9EUkFGVF9SRUdJU1RFUiIsIkFDQ0VTU19UT0tFTiIsIlJFRlJFU0hfVE9LRU4iLCJBVEhMRVRFX0lEIl0sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///(api)/./utils/constants.js\n");
 
+/***/ }),
 
-// EXTERNAL MODULE: external "uuidv4"
-var external_uuidv4_ = __webpack_require__(398);
-// EXTERNAL MODULE: external "moment"
-var external_moment_ = __webpack_require__(245);
-var external_moment_default = /*#__PURE__*/__webpack_require__.n(external_moment_);
-;// CONCATENATED MODULE: ./pages/api/register.js
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+/***/ "(api)/./utils/knex.js":
+/*!***********************!*\
+  !*** ./utils/knex.js ***!
+  \***********************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
+"use strict";
+eval("\nmodule.exports = __webpack_require__(/*! knex */ \"knex\")({\n    client: \"mysql2\",\n    debug: false,\n    connection: {\n        host: process.env.DB_HOST,\n        user: process.env.DB_USER,\n        password: process.env.DB_PASS,\n        database: process.env.DB_NAME,\n        port: process.env.DB_PORT,\n        connectTimeout: 300000\n    },\n    pool: {\n        min: 0,\n        max: 10\n    }\n});\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKGFwaSkvLi91dGlscy9rbmV4LmpzLmpzIiwibWFwcGluZ3MiOiJBQUFBQTtBQUFBQSxNQUFNLENBQUNDLE9BQU8sR0FBR0MsbUJBQU8sQ0FBQyxrQkFBTSxDQUFDLENBQUM7SUFDL0JDLE1BQU0sRUFBRSxRQUFRO0lBQ2hCQyxLQUFLLEVBQUUsS0FBSztJQUNaQyxVQUFVLEVBQUU7UUFDVkMsSUFBSSxFQUFFQyxPQUFPLENBQUNDLEdBQUcsQ0FBQ0MsT0FBTztRQUN6QkMsSUFBSSxFQUFFSCxPQUFPLENBQUNDLEdBQUcsQ0FBQ0csT0FBTztRQUN6QkMsUUFBUSxFQUFFTCxPQUFPLENBQUNDLEdBQUcsQ0FBQ0ssT0FBTztRQUM3QkMsUUFBUSxFQUFFUCxPQUFPLENBQUNDLEdBQUcsQ0FBQ08sT0FBTztRQUM3QkMsSUFBSSxFQUFFVCxPQUFPLENBQUNDLEdBQUcsQ0FBQ1MsT0FBTztRQUN6QkMsY0FBYyxFQUFFLE1BQU07S0FDdkI7SUFDREMsSUFBSSxFQUFFO1FBQUVDLEdBQUcsRUFBRSxDQUFDO1FBQUVDLEdBQUcsRUFBRSxFQUFFO0tBQUU7Q0FDMUIsQ0FBQyxDQUFDIiwic291cmNlcyI6WyJ3ZWJwYWNrOi8vcnVucmlkZS8uL3V0aWxzL2tuZXguanM/MDYyNiJdLCJzb3VyY2VzQ29udGVudCI6WyJtb2R1bGUuZXhwb3J0cyA9IHJlcXVpcmUoXCJrbmV4XCIpKHtcbiAgY2xpZW50OiBcIm15c3FsMlwiLFxuICBkZWJ1ZzogZmFsc2UsXG4gIGNvbm5lY3Rpb246IHtcbiAgICBob3N0OiBwcm9jZXNzLmVudi5EQl9IT1NULFxuICAgIHVzZXI6IHByb2Nlc3MuZW52LkRCX1VTRVIsXG4gICAgcGFzc3dvcmQ6IHByb2Nlc3MuZW52LkRCX1BBU1MsXG4gICAgZGF0YWJhc2U6IHByb2Nlc3MuZW52LkRCX05BTUUsXG4gICAgcG9ydDogcHJvY2Vzcy5lbnYuREJfUE9SVCxcbiAgICBjb25uZWN0VGltZW91dDogMzAwMDAwLFxuICB9LFxuICBwb29sOiB7IG1pbjogMCwgbWF4OiAxMCB9LFxufSk7XG4iXSwibmFtZXMiOlsibW9kdWxlIiwiZXhwb3J0cyIsInJlcXVpcmUiLCJjbGllbnQiLCJkZWJ1ZyIsImNvbm5lY3Rpb24iLCJob3N0IiwicHJvY2VzcyIsImVudiIsIkRCX0hPU1QiLCJ1c2VyIiwiREJfVVNFUiIsInBhc3N3b3JkIiwiREJfUEFTUyIsImRhdGFiYXNlIiwiREJfTkFNRSIsInBvcnQiLCJEQl9QT1JUIiwiY29ubmVjdFRpbWVvdXQiLCJwb29sIiwibWluIiwibWF4Il0sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///(api)/./utils/knex.js\n");
 
+/***/ }),
 
+/***/ "(api)/./utils/response.js":
+/*!***************************!*\
+  !*** ./utils/response.js ***!
+  \***************************/
+/***/ ((__unused_webpack_module, exports) => {
 
-
-async function handler(req, res) {
-    if (req.method == "POST") {
-        const { fullName , nip , dob , gender , phoneNumber , teamId , organization , categoryId , teamName ,  } = req.body;
-        try {
-            if (!fullName) return response.badRequest("field name required", res);
-            if (!nip) return response.badRequest("field nip required", res);
-            if (!dob) return response.badRequest("field dob required", res);
-            if (!gender) return response.badRequest("field gender required", res);
-            if (!phoneNumber) return response.badRequest("field phoneNumber required", res);
-            if (!organization) return response.badRequest("field organization required", res);
-            if (!categoryId && !constants_namespaceObject["default"].includes(category)) return response.badRequest("field categoryId invalid", res);
-            if (!teamId && !teamName) return response.badRequest("field teamId required", res);
-            const userId = (0,external_uuidv4_.uuid)();
-            var _teamId = "";
-            if (teamName) {
-                const [id] = await knex_default()("team").insert({
-                    id: (0,external_uuidv4_.uuid)(),
-                    name: teamName,
-                    user_id: userId,
-                    created_date: external_moment_default()().utc().format("YYYY-MM-DD HH:mm:ss")
-                }).returning("id");
-                _teamId = id;
-            }
-            await knex_default()("user_accounts").insert({
-                id: (0,external_uuidv4_.uuid)(),
-                full_name: fullName,
-                team_id: teamId ? teamId : _teamId,
-                phone_number: phoneNumber,
-                dob: dob,
-                sex: gender,
-                organization: organization,
-                nip: nip,
-                created_date: external_moment_default()().utc().format("YYYY-MM-DD HH:mm:ss")
-            }).returning("id");
-            return response.ok("Successfully register", {
-                userId: userId
-            }, res);
-        } catch (e) {
-            console.log(e);
-            if (e.code == "ER_DUP_ENTRY" && e.sql.includes("insert into `team`")) {
-                return response.error(500, "Nama group sudah digunakan", res);
-            }
-            return response.error(500, "Internal server error", res);
-        }
-    } else {
-        return response.notFound("wrong route api", res);
-    }
-};
-
+eval("exports.ok = (message, payload, res)=>{\n    return res.status(200).json({\n        status: \"success\",\n        message: message,\n        payload: payload\n    });\n};\nexports.badRequest = (message, res)=>{\n    return res.status(400).json({\n        status: \"bad request\",\n        message: message\n    });\n};\nexports.forbidden = (message, res)=>{\n    if (message === null) {\n        message = \"You have no permission to access\";\n    }\n    return res.status(403).json({\n        status: \"forbidden\",\n        message: message\n    });\n};\nexports.notFound = (message, res)=>{\n    return res.status(404).json({\n        status: \"not found\",\n        message: message\n    });\n};\nexports.conflict = (message, res)=>{\n    return res.status(409).json({\n        status: \"conflict\",\n        message: message\n    });\n};\nexports.unauthorized = (message, res)=>{\n    return res.status(401).json({\n        status: \"unauthorized\",\n        message: message\n    });\n};\nexports.error = (code, message, res)=>{\n    return res.status(code || 400).json({\n        status: \"error\",\n        message: message\n    });\n};\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKGFwaSkvLi91dGlscy9yZXNwb25zZS5qcy5qcyIsIm1hcHBpbmdzIjoiQUFBQUEsVUFBVSxHQUFHLENBQUNFLE9BQU8sRUFBRUMsT0FBTyxFQUFFQyxHQUFHLEdBQUs7SUFDdEMsT0FBT0EsR0FBRyxDQUFDQyxNQUFNLENBQUMsR0FBRyxDQUFDLENBQUNDLElBQUksQ0FBQztRQUMxQkQsTUFBTSxFQUFFLFNBQVM7UUFDakJILE9BQU8sRUFBRUEsT0FBTztRQUNoQkMsT0FBTyxFQUFFQSxPQUFPO0tBQ2pCLENBQUMsQ0FBQztDQUNKLENBQUM7QUFFRkgsa0JBQWtCLEdBQUcsQ0FBQ0UsT0FBTyxFQUFFRSxHQUFHLEdBQUs7SUFDckMsT0FBT0EsR0FBRyxDQUFDQyxNQUFNLENBQUMsR0FBRyxDQUFDLENBQUNDLElBQUksQ0FBQztRQUMxQkQsTUFBTSxFQUFFLGFBQWE7UUFDckJILE9BQU8sRUFBRUEsT0FBTztLQUNqQixDQUFDLENBQUM7Q0FDSixDQUFDO0FBRUZGLGlCQUFpQixHQUFHLENBQUNFLE9BQU8sRUFBRUUsR0FBRyxHQUFLO0lBQ3BDLElBQUlGLE9BQU8sS0FBSyxJQUFJLEVBQUU7UUFDcEJBLE9BQU8sR0FBRyxrQ0FBa0MsQ0FBQztLQUM5QztJQUNELE9BQU9FLEdBQUcsQ0FBQ0MsTUFBTSxDQUFDLEdBQUcsQ0FBQyxDQUFDQyxJQUFJLENBQUM7UUFDMUJELE1BQU0sRUFBRSxXQUFXO1FBQ25CSCxPQUFPLEVBQUVBLE9BQU87S0FDakIsQ0FBQyxDQUFDO0NBQ0osQ0FBQztBQUVGRixnQkFBZ0IsR0FBRyxDQUFDRSxPQUFPLEVBQUVFLEdBQUcsR0FBSztJQUNuQyxPQUFPQSxHQUFHLENBQUNDLE1BQU0sQ0FBQyxHQUFHLENBQUMsQ0FBQ0MsSUFBSSxDQUFDO1FBQzFCRCxNQUFNLEVBQUUsV0FBVztRQUNuQkgsT0FBTyxFQUFFQSxPQUFPO0tBQ2pCLENBQUMsQ0FBQztDQUNKLENBQUM7QUFFRkYsZ0JBQWdCLEdBQUcsQ0FBQ0UsT0FBTyxFQUFFRSxHQUFHLEdBQUs7SUFDbkMsT0FBT0EsR0FBRyxDQUFDQyxNQUFNLENBQUMsR0FBRyxDQUFDLENBQUNDLElBQUksQ0FBQztRQUMxQkQsTUFBTSxFQUFFLFVBQVU7UUFDbEJILE9BQU8sRUFBRUEsT0FBTztLQUNqQixDQUFDLENBQUM7Q0FDSixDQUFDO0FBRUZGLG9CQUFvQixHQUFHLENBQUNFLE9BQU8sRUFBRUUsR0FBRyxHQUFLO0lBQ3ZDLE9BQU9BLEdBQUcsQ0FBQ0MsTUFBTSxDQUFDLEdBQUcsQ0FBQyxDQUFDQyxJQUFJLENBQUM7UUFDMUJELE1BQU0sRUFBRSxjQUFjO1FBQ3RCSCxPQUFPLEVBQUVBLE9BQU87S0FDakIsQ0FBQyxDQUFDO0NBQ0osQ0FBQztBQUVGRixhQUFhLEdBQUcsQ0FBQ2EsSUFBSSxFQUFFWCxPQUFPLEVBQUVFLEdBQUcsR0FBSztJQUN0QyxPQUFPQSxHQUFHLENBQUNDLE1BQU0sQ0FBQ1EsSUFBSSxJQUFJLEdBQUcsQ0FBQyxDQUFDUCxJQUFJLENBQUM7UUFDbENELE1BQU0sRUFBRSxPQUFPO1FBQ2ZILE9BQU8sRUFBRUEsT0FBTztLQUNqQixDQUFDLENBQUM7Q0FDSixDQUFDIiwic291cmNlcyI6WyJ3ZWJwYWNrOi8vcnVucmlkZS8uL3V0aWxzL3Jlc3BvbnNlLmpzPzBhMGUiXSwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0cy5vayA9IChtZXNzYWdlLCBwYXlsb2FkLCByZXMpID0+IHtcbiAgcmV0dXJuIHJlcy5zdGF0dXMoMjAwKS5qc29uKHtcbiAgICBzdGF0dXM6IFwic3VjY2Vzc1wiLFxuICAgIG1lc3NhZ2U6IG1lc3NhZ2UsXG4gICAgcGF5bG9hZDogcGF5bG9hZCxcbiAgfSk7XG59O1xuXG5leHBvcnRzLmJhZFJlcXVlc3QgPSAobWVzc2FnZSwgcmVzKSA9PiB7XG4gIHJldHVybiByZXMuc3RhdHVzKDQwMCkuanNvbih7XG4gICAgc3RhdHVzOiBcImJhZCByZXF1ZXN0XCIsXG4gICAgbWVzc2FnZTogbWVzc2FnZSxcbiAgfSk7XG59O1xuXG5leHBvcnRzLmZvcmJpZGRlbiA9IChtZXNzYWdlLCByZXMpID0+IHtcbiAgaWYgKG1lc3NhZ2UgPT09IG51bGwpIHtcbiAgICBtZXNzYWdlID0gXCJZb3UgaGF2ZSBubyBwZXJtaXNzaW9uIHRvIGFjY2Vzc1wiO1xuICB9XG4gIHJldHVybiByZXMuc3RhdHVzKDQwMykuanNvbih7XG4gICAgc3RhdHVzOiBcImZvcmJpZGRlblwiLFxuICAgIG1lc3NhZ2U6IG1lc3NhZ2UsXG4gIH0pO1xufTtcblxuZXhwb3J0cy5ub3RGb3VuZCA9IChtZXNzYWdlLCByZXMpID0+IHtcbiAgcmV0dXJuIHJlcy5zdGF0dXMoNDA0KS5qc29uKHtcbiAgICBzdGF0dXM6IFwibm90IGZvdW5kXCIsXG4gICAgbWVzc2FnZTogbWVzc2FnZSxcbiAgfSk7XG59O1xuXG5leHBvcnRzLmNvbmZsaWN0ID0gKG1lc3NhZ2UsIHJlcykgPT4ge1xuICByZXR1cm4gcmVzLnN0YXR1cyg0MDkpLmpzb24oe1xuICAgIHN0YXR1czogXCJjb25mbGljdFwiLFxuICAgIG1lc3NhZ2U6IG1lc3NhZ2UsXG4gIH0pO1xufTtcblxuZXhwb3J0cy51bmF1dGhvcml6ZWQgPSAobWVzc2FnZSwgcmVzKSA9PiB7XG4gIHJldHVybiByZXMuc3RhdHVzKDQwMSkuanNvbih7XG4gICAgc3RhdHVzOiBcInVuYXV0aG9yaXplZFwiLFxuICAgIG1lc3NhZ2U6IG1lc3NhZ2UsXG4gIH0pO1xufTtcblxuZXhwb3J0cy5lcnJvciA9IChjb2RlLCBtZXNzYWdlLCByZXMpID0+IHtcbiAgcmV0dXJuIHJlcy5zdGF0dXMoY29kZSB8fCA0MDApLmpzb24oe1xuICAgIHN0YXR1czogXCJlcnJvclwiLFxuICAgIG1lc3NhZ2U6IG1lc3NhZ2UsXG4gIH0pO1xufTtcbiJdLCJuYW1lcyI6WyJleHBvcnRzIiwib2siLCJtZXNzYWdlIiwicGF5bG9hZCIsInJlcyIsInN0YXR1cyIsImpzb24iLCJiYWRSZXF1ZXN0IiwiZm9yYmlkZGVuIiwibm90Rm91bmQiLCJjb25mbGljdCIsInVuYXV0aG9yaXplZCIsImVycm9yIiwiY29kZSJdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///(api)/./utils/response.js\n");
 
 /***/ })
 
@@ -166,7 +117,7 @@ async function handler(req, res) {
 var __webpack_require__ = require("../../webpack-api-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [371], () => (__webpack_exec__(361)));
+var __webpack_exports__ = (__webpack_exec__("(api)/./pages/api/register.js"));
 module.exports = __webpack_exports__;
 
 })();

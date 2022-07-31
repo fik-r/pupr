@@ -4,9 +4,13 @@ import { useRouter } from "next/router";
 import { FrLayout2 } from "../../components/FrLayout";
 import { FrTextField } from "../../components/FrField";
 import FrButton from "../../components/FrButton";
-import { STORAGE_DRAFT_REGISTER } from "../../utils/constants";
-import axios from "axios";
+import {
+  STORAGE_DRAFT_REGISTER,
+  ACCESS_TOKEN,
+  REFRESH_TOKEN,
+} from "../../utils/constants";
 import { ToastError } from "../../components/FrToast";
+import API from "../../utils/api";
 
 const RegisterAddGroup = () => {
   const [groupName, setGroupName] = useState("");
@@ -19,11 +23,12 @@ const RegisterAddGroup = () => {
   function handleNext() {
     if (groupNameValidation) return;
     setLoading(true);
-    const draftRegister = JSON.parse(
-      localStorage.getItem(STORAGE_DRAFT_REGISTER)
-    );
-    axios
-      .post(process.env.NEXT_PUBLIC_BASE_URL + "/api/register", {
+    const draftRegister =
+      JSON.parse(localStorage.getItem(STORAGE_DRAFT_REGISTER)) || {};
+    API
+      .post("/api/register", {
+        email: draftRegister.email,
+        password: draftRegister.password,
         fullName: draftRegister.fullName,
         nip: draftRegister.nip,
         dob: draftRegister.dob,
@@ -34,14 +39,9 @@ const RegisterAddGroup = () => {
         organization: draftRegister.unitOrganization,
       })
       .then((res) => {
-        localStorage.setItem(
-          STORAGE_DRAFT_REGISTER,
-          JSON.stringify({
-            ...draftRegister,
-            teamName: groupName,
-            userId: res.data.payload.userId,
-          })
-        );
+        localStorage.removeItem(STORAGE_DRAFT_REGISTER);
+        localStorage.setItem(ACCESS_TOKEN, res.data.payload.accessToken);
+        localStorage.setItem(REFRESH_TOKEN, res.data.payload.refreshToken);
         router.push(`connect-strava`);
       })
       .catch((err) => {

@@ -27,13 +27,13 @@ const ConnectStrava = () => {
         <img
           width="150px"
           height="150px"
-          className="mx-auto mb-[61px]"
+          className="mobile:w-[132px] mobile:h-[132px] mx-auto mb-[61px] mobile:mt-[100px]"
           src="/icons/ic_done_secondary.svg"
         />
-        <span className="fr-text-headline-1 text-black self-center">
+        <span className="fr-text-headline-1 mobile:fr-text-subhead-2 text-black self-center">
           Pendaftaran Peserta Berhasil
         </span>
-        <span className="fr-text-subhead-1 text-muted self-center">
+        <span className="fr-text-subhead-1 mobile:fr-text-body text-muted self-center">
           Silahkan masuk untuk melanjutkan
         </span>
         <FrButton

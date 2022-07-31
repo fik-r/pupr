@@ -8,7 +8,6 @@ module.exports = require("knex")({
     database: process.env.DB_NAME,
     port: process.env.DB_PORT,
     connectTimeout: 300000,
-    application_name: "pupr-fun-ride-nextjs",
   },
   pool: { min: 0, max: 10 },
 });

@@ -1,55 +1,55 @@
 import Head from "next/head";
 import React, { useEffect } from "react";
-import axios from "axios";
 import { FrLayout2 } from "../../components/FrLayout";
 import { STORAGE_DRAFT_REGISTER } from "../../utils/constants";
 import { useRouter } from "next/router";
+import axios from "axios";
+import API from "../../utils/api"
 
 export default function ExchangeToken(props) {
   const router = useRouter();
   useEffect(() => {
-    axios
-      .post("https://www.strava.com/oauth/token", null, {
-        params: {
-          client_id: 90543,
-          client_secret: "d97aefd34f169bb8be5fc2c9efcb1413e74378a0",
-          code: props.data.code,
-          grant_type: "authorization_code",
-        },
-      })
+    axios.post("https://www.strava.com/oauth/token", null, {
+      params: {
+        client_id: 90543,
+        client_secret: "d97aefd34f169bb8be5fc2c9efcb1413e74378a0",
+        code: props.data.code,
+        grant_type: "authorization_code",
+      },
+    })
       .then((res) => {
         const { refresh_token, access_token } = res.data;
-        localStorage.setItem("refresh_token_strava", refresh_token);
-        localStorage.setItem("access_token_strava", access_token);
-        getAthlete();
+        getAthlete(access_token, refresh_token);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
 
-  function getAthlete() {
+  function getAthlete(access_token, refresh_token) {
+    console.log(access_token);
     axios({
       url: "https://www.strava.com/api/v3/athlete",
       method: "GET",
       headers: {
-        authorization: `Bearer ${localStorage.getItem("access_token_strava")}`,
+        authorization: `Bearer ${access_token}`,
       },
     })
       .then((res) => {
-        linkToStrava(res.data.id);
+        linkToStrava(res.data, access_token, refresh_token);
       })
       .catch((err) => {
         console.log(err);
       });
   }
 
-  function linkToStrava(athleteId) {
-    axios
-      .post(process.env.NEXT_PUBLIC_BASE_URL + "/api/link-to-strava", {
-        userId: JSON.parse(localStorage.getItem(STORAGE_DRAFT_REGISTER)).userId,
-        athleteId: athleteId,
-      })
+  function linkToStrava(data, access_token, refresh_token) {
+    API.post(process.env.NEXT_PUBLIC_BASE_URL + "/api/link-to-strava", {
+      athleteId: data.id,
+      profile: data.profile,
+      accessToken: access_token,
+      refreshToken: refresh_token,
+    })
       .then((res) => {
         router.push("/profile");
       })

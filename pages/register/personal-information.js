@@ -27,7 +27,7 @@ const RegisterPersonalInformation = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  const emailValidation = email.length == 0;
+  const [emailValidation, setEmailValidation] = useState(false);
   const passwordValidation = password.length == 0;
   const nameValidation = fullName.length == 0;
   const nipValidation = nip.length == 0;
@@ -59,7 +59,7 @@ const RegisterPersonalInformation = () => {
         password: password,
         fullName: fullName,
         nip: nip,
-        dob: moment(dob).utc().valueOf(),
+        dob: moment(dob).utc(),
         gender: gender,
         phoneNumber: phoneNumber,
         unitOrganization: unitOrganization,
@@ -84,12 +84,15 @@ const RegisterPersonalInformation = () => {
         <div className="flex mobile:flex-col mobile:items-center justify-center gap-x-3 mobile:gap-y-2 mobile:pb-2">
           <FrTextField
             label="Email"
-            errorMessage="Email tidak boleh kosong"
+            errorMessage="Format email tidak valid"
             isError={emailValidation}
             placeholder="Masukkan Email"
             inputType="text"
+            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
             onChange={(event) => {
               const value = event.target.value;
+              const isValid = event.target.validity.valid;
+              setEmailValidation(!isValid)
               setEmail(value);
             }}
             value={email}
