@@ -1,9 +1,22 @@
 {
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
-  "/_document": "pages/_document.js",
-  "/redirect/exchange-token": "pages/redirect/exchange-token.js",
+  "/api/group": "pages/api/group.js",
   "/api/link-to-strava": "pages/api/link-to-strava.js",
+  "/api/login": "pages/api/login.js",
+  "/api/profile": "pages/api/profile.js",
   "/api/refresh-token": "pages/api/refresh-token.js",
-  "/login": "pages/login.js"
+  "/api/register": "pages/api/register.js",
+  "/components": "pages/components.html",
+  "/profile": "pages/profile.html",
+  "/": "pages/index.html",
+  "/login": "pages/login.html",
+  "/register/add-group": "pages/register/add-group.html",
+  "/register/choose-category": "pages/register/choose-category.html",
+  "/register/connect-strava": "pages/register/connect-strava.html",
+  "/register/choose-group": "pages/register/choose-group.html",
+  "/register/personal-information": "pages/register/personal-information.html",
+  "/redirect/exchange-token": "pages/redirect/exchange-token.js",
+  "/_document": "pages/_document.js",
+  "/404": "pages/404.html"
 }

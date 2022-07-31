@@ -48,7 +48,7 @@ const Profile = () => {
       {loading && (
         <div className="absolute w-screen h-full bg-muted/25 flex justify-center top-0 right-0 z-50">
           <div
-            class="radial-progress bg-primary text-primary-content border-4 border-primary mt-[350px] animate-spin"
+            className="radial-progress bg-primary text-primary-content border-4 border-primary mt-[350px] animate-spin"
             style={{ "--value": 70 }}
           ></div>
         </div>
@@ -66,8 +66,8 @@ const Profile = () => {
 
       <div className="flex-row flex mobile:flex-col mobile:items-center justify-center gap-x-10 px-12 mobile:px-0">
         <div className="card w-[321px] h-fit bg-base-100 border border-lightgrey rounded-[20px] p-[30px] mt-5 flex items-center">
-          <div class="avatar mt-[20px] mb-[30px]">
-            <div class="w-24 rounded-full">
+          <div className="avatar mt-[20px] mb-[30px]">
+            <div className="w-24 rounded-full">
               <img src={user.profile} />
             </div>
           </div>
