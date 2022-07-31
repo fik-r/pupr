@@ -202,7 +202,8 @@ const Profile = () => {
                         >
                           {m.full_name}
                         </span>
-                        <img
+                        { group.user_id == user.id
+                          && <img
                           htmlFor="delete-modal"
                           className="w-[20px] h-[20px] cursor-pointer"
                           src="/icons/ic_delete.svg"
@@ -211,6 +212,7 @@ const Profile = () => {
                             setDeleteModal(!deleteModal);
                           }}
                         />
+                        }
                       </div>
                     );
                   })}

@@ -40,7 +40,7 @@ export default async function handler(req, res) {
               knex("team as t")
                 .where("t.id", user.team_id)
                 .join("user_accounts as u", "u.id", "t.user_id")
-                .select("u.full_name as captain_name", "t.name", "t.category")
+                .select("u.full_name as captain_name", "t.name", "t.category", "t.user_id")
                 .first(),
               knex("user_accounts as u")
                 .where("u.team_id", user.team_id)
