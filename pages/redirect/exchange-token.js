@@ -21,7 +21,7 @@ export default function ExchangeToken(props) {
         .post("https://www.strava.com/oauth/token", null, {
           params: {
             client_id: clientId,
-            client_secret: "d97aefd34f169bb8be5fc2c9efcb1413e74378a0",
+            client_secret: clientSecret,
             code: props.data.code,
             grant_type: "authorization_code",
           },
