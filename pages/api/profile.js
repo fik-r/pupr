@@ -62,27 +62,19 @@ export default async function handler(req, res) {
               );
               const maleMemberCount = maleMember ? maleMember.length : 0;
               const femaleMemberCount = femaleMember ? femaleMember.length : 0;
-              const maxMember =
-                userGroup.category == "01.A" || userGroup.category == "01.B"
-                  ? 5
-                  : 2;
 
               const categoryType1Validation =
                 ((userGroup.category == "01.A" ||
                   userGroup.category == "01.B") &&
-                  userGroup.sex == "M" &&
                   maleMemberCount == 3) ||
                 ((userGroup.category == "01.A" ||
                   userGroup.category == "01.B") &&
-                  userGroup.sex == "F" &&
                   femaleMemberCount == 2);
 
               const categoryType2Validation =
                 (userGroup.category == "02" &&
-                  userGroup.sex == "M" &&
                   maleMemberCount == 1) ||
                 (userGroup.category == "02" &&
-                  userGroup.sex == "F" &&
                   femaleMemberCount == 1);
               let isReady = categoryType1Validation || categoryType2Validation;
 

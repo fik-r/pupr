@@ -53,7 +53,7 @@ const RegisterPersonalInformation = () => {
     unitOrganizationValidation;
 
   useEffect(() => {
-    localStorage.removeItem(STORAGE_DRAFT_REGISTER);
+    localStorage.clear();
   }, []);
   function handleNext() {
     if (isNextBtnDisabled) return;
