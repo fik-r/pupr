@@ -177,7 +177,7 @@ const Profile = () => {
                     group.isReady ? "bg-secondary" : "bg-accent"
                   }`}
                 >
-                  {group.isReady ? "Sudah Siap" : "Belum Siap"}
+                  {group.isReady ? "Sudah Lengkap" : "Belum Lengkap"}
                 </div>
               </div>
               <FrText label="Nama Ketua" value={group.captain_name} />

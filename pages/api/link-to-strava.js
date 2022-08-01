@@ -37,7 +37,7 @@ export default async function handler(req, res) {
                 .first();
               if (userStrava) {
                 return response.conflict(
-                  "Akun strava sudah terhubung dengan akun lain",
+                  `Strava ID ${athleteId} sudah digunakan di akun lain`,
                   res
                 );
               }

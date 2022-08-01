@@ -40,7 +40,12 @@ export default async function handler(req, res) {
               knex("team as t")
                 .where("t.id", user.team_id)
                 .join("user_accounts as u", "u.id", "t.user_id")
-                .select("u.full_name as captain_name", "t.name", "t.category", "t.user_id")
+                .select(
+                  "u.full_name as captain_name",
+                  "t.name",
+                  "t.category",
+                  "t.user_id"
+                )
                 .first(),
               knex("user_accounts as u")
                 .where("u.team_id", user.team_id)
@@ -67,17 +72,18 @@ export default async function handler(req, res) {
                   userGroup.category == "01.B") &&
                   userGroup.sex == "M" &&
                   maleMemberCount == 3) ||
-                (userGroup.sex == "F" &&
-                  femaleMemberCount == 2 &&
-                  memberCount == maxMember);
+                ((userGroup.category == "01.A" ||
+                  userGroup.category == "01.B") &&
+                  userGroup.sex == "F" &&
+                  femaleMemberCount == 2);
 
               const categoryType2Validation =
                 (userGroup.category == "02" &&
                   userGroup.sex == "M" &&
                   maleMemberCount == 1) ||
-                (userGroup.sex == "F" &&
-                  femaleMemberCount == 1 &&
-                  memberCount == maxMember);
+                (userGroup.category == "02" &&
+                  userGroup.sex == "F" &&
+                  femaleMemberCount == 1);
               let isReady = categoryType1Validation || categoryType2Validation;
 
               userGroup.isReady = isReady;
