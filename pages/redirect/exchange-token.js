@@ -31,8 +31,7 @@ export default function ExchangeToken(props) {
             res.data;
           getAthlete(access_token, refresh_token, expires_in, expires_at);
         })
-        .catch((err) => {
-        });
+        .catch((err) => {});
     }
   }, []);
 
@@ -77,10 +76,7 @@ export default function ExchangeToken(props) {
       })
       .catch((e) => {
         if (e.response.status == 409) {
-          localStorage.setItem(
-            STORAGE_TOAST_ERROR,
-            "Akun sudah terhubung dengan akun lain"
-          );
+          localStorage.setItem(STORAGE_TOAST_ERROR, e.response.data.message);
           router.push("/register/connect-strava");
         }
       });
