@@ -38,8 +38,8 @@ const RegisterPersonalInformation = () => {
   const phoneValidation =
     phoneNumber.length == 0 ||
     !phoneNumber.startsWith("08") ||
-    phoneNumber.length <= 10 ||
-    phoneNumber.length > 14;
+    phoneNumber.length < 5 ||
+    phoneNumber.length > 15;
   const unitOrganizationValidation = unitOrganization.length == 0;
 
   const isNextBtnDisabled =
