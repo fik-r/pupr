@@ -42,6 +42,8 @@ const LIST_UNIT_ORGANIZATION = [
   "Badan Pengembangan Sumber Daya Manusia",
   "Badan Pengatur Jalan Tol",
   "Lembaga Pengembangan Jasa Konstruksi",
+  "Insinyur Profesional Utama",
+  "Dharma Wanita"
 ];
 const STORAGE_DRAFT_REGISTER = "DRAFT_REGISTER";
 const ACCESS_TOKEN = "ACCESS_TOKEN";
