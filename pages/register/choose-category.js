@@ -13,6 +13,7 @@ import moment from "moment";
 
 const RegisterChooseCategory = () => {
   const router = useRouter();
+  const [draft, setDraft] = useState({})
   const [listCategory, setListCategory] = useState(
     LIST_CATEGORY.map((category) => {
       return {
@@ -26,7 +27,7 @@ const RegisterChooseCategory = () => {
   useEffect(() => {
     const draftRegister =
       JSON.parse(localStorage.getItem(STORAGE_DRAFT_REGISTER)) || {};
-      
+    setDraft(draftRegister)
     if (!draftRegister.email && !localStorage.getItem(ACCESS_TOKEN)) {
       router.push("/");
     } else {
@@ -72,8 +73,8 @@ const RegisterChooseCategory = () => {
               category.title == "02"
                 ? false
                 : category.title == "01.A"
-                ? age > 40
-                : age <= 40;
+                ? moment(draft.dob) <= moment("1981-08-13")
+                : moment(draft.dob) > moment("1981-08-13");
             return (
               <FrCardCategory
                 key={index}
