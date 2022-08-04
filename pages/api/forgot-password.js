@@ -25,7 +25,7 @@ export default async function handler(req, res) {
 
       var salt = bcrypt.genSaltSync(10);
       var hashedPassword = bcrypt.hashSync(
-        moment(user.dob).utc().format("YYYY-MM-DD"),
+        moment(user.dob).format("YYYY-MM-DD"),
         salt
       );
 
