@@ -19,7 +19,7 @@ export default async function handler(req, res) {
       if (!user) {
         return response.notFound("Email tidak ditemukan", res);
       }
-      if (moment(user.dob).utc().format("YYYY-MM-DD") != dob) {
+      if (moment(user.dob).format("YYYY-MM-DD") != dob) {
         return response.badRequest("Tanggal lahir tidak sesuai", res);
       }
 
