@@ -170,8 +170,8 @@ const Profile = () => {
         <div className={`modal ${passwordModal == true ? "modal-open" : ""}`}>
           <div className="modal-box w-[388px] px-auto rounded-[10px]">
             <label
-              for="my-modal-3"
-              class="btn btn-sm btn-circle btn-accent text-white absolute right-2 top-2"
+              htmlFor="password-modal"
+              className="btn btn-sm btn-circle btn-accent text-white absolute right-2 top-2"
               onClick={() => {
                 setPasswordModal(false);
                 setOldPassword("");
