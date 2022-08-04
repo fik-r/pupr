@@ -4,6 +4,7 @@ import { FrLayout2 } from "../components/FrLayout";
 import useResponsive from "../utils/media-query";
 import FrText from "../components/FrText";
 import FrButton from "../components/FrButton";
+import { FrTextField } from "../components/FrField";
 import { useState, useEffect } from "react";
 import { ToastError, ToastSuccess } from "../components/FrToast";
 import moment from "moment";
@@ -25,7 +26,11 @@ const Profile = () => {
   const [group, setGroup] = useState({});
   const [athleteId, setAthleteId] = useState("");
   const [deleteModal, setDeleteModal] = useState(false);
+  const [passwordModal, setPasswordModal] = useState(false);
   const [selectedMember, setSelectedMember] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [oldPassword, setOldPassword] = useState("");
+  const [loadingPassword, setLoadingPassword] = useState(false);
 
   useEffect(() => {
     if (!localStorage.getItem(ACCESS_TOKEN)) {
@@ -61,6 +66,26 @@ const Profile = () => {
         setLoading(false);
       });
   }
+  function handleUpdate() {
+    setLoadingPassword(true);
+    API.post("api/update-password", {
+      oldPassword: oldPassword,
+      newPassword: newPassword,
+    })
+      .then((res) => {
+        setSuccess(ToastSuccess("Berhasil merubah password"));
+        setPasswordModal(false);
+        setNewPassword("");
+        setOldPassword("");
+      })
+      .catch((err) => {
+        setError(ToastError(err.response.data.message));
+      })
+      .finally(() => {
+        setLoadingPassword(false);
+      });
+  }
+
   function submitDelete() {
     setDeleteModal(false);
     setLoading(true);
@@ -142,6 +167,59 @@ const Profile = () => {
           </div>
         </div>
 
+        <div className={`modal ${passwordModal == true ? "modal-open" : ""}`}>
+          <div className="modal-box w-[388px] px-auto rounded-[10px]">
+            <label
+              for="my-modal-3"
+              class="btn btn-sm btn-circle btn-accent text-white absolute right-2 top-2"
+              onClick={() => {
+                setPasswordModal(false);
+                setOldPassword("");
+                setNewPassword("");
+              }}
+            >
+              ✕
+            </label>
+            <div className="pt-[20px] flex flex-col items-center">
+              <span className="fr-text-headline-1 mb-[25px]">Update Password</span>
+              <FrTextField
+                label="Password Lama"
+                errorMessage="Password tidak boleh kosong"
+                isError={oldPassword.length == 0}
+                placeholder="Masukkan Password Lama"
+                inputType="password"
+                value={oldPassword}
+                onChange={(event) => {
+                  const value = event.target.value;
+                  setOldPassword(value);
+                }}
+              />
+              <FrTextField
+                label="Password Baru"
+                errorMessage="Password tidak boleh kosong"
+                isError={newPassword.length == 0}
+                placeholder="Masukkan Password Baru"
+                inputType="password"
+                value={newPassword}
+                onChange={(event) => {
+                  const value = event.target.value;
+                  setNewPassword(value);
+                }}
+              />
+            </div>
+            <div className="flex justify-center pt-[35px] mb-[60px]">
+              <FrButton
+                className="w-[268px]"
+                color="primary"
+                label="Update Password"
+                loading={loadingPassword}
+                disabled={newPassword.length == 0 || oldPassword.length == 0}
+                onClick={handleUpdate}
+              />
+            </div>
+          </div>
+        </div>
+
         <div className="card w-[699px] mobile:w-[321px] bg-base-100 border border-lightgrey rounded-[20px] py-[45px] mt-5 flex">
           <span className="px-[45px] mobile:px-[27px]">Data Diri</span>
           <div className="grid grid-cols-2 mobile:grid-cols-1 mt-[34px] px-[45px] mobile:px-[27px] mobile:gap-y-4">
@@ -152,6 +230,19 @@ const Profile = () => {
                 value={moment(user.dob).format("DD MMMM YYYY")}
               />
               <FrText label="No Handphone" value={user.phone_number} />
+              <div className="flex flex-col">
+                <span className="text-muted fr-text-body font-weight-medium">
+                  Keamanan
+                </span>
+                <div
+                  className={`w-fit fr-text-caption text-white rounded-full py-[7px] px-[12px] mt-[7px] bg-secondary cursor-pointer`}
+                  onClick={() => {
+                    setPasswordModal(true);
+                  }}
+                >
+                  Update Password
+                </div>
+              </div>
             </div>
 
             <div className="flex flex-col space-y-4">
@@ -199,17 +290,17 @@ const Profile = () => {
                         >
                           {m.full_name}
                         </span>
-                        { group.user_id == user.id
-                          && <img
-                          htmlFor="delete-modal"
-                          className="w-[20px] h-[20px] cursor-pointer"
-                          src="/icons/ic_delete.svg"
-                          onClick={() => {
-                            setSelectedMember(m.id);
-                            setDeleteModal(!deleteModal);
-                          }}
-                        />
-                        }
+                        {group.user_id == user.id && (
+                          <img
+                            htmlFor="delete-modal"
+                            className="w-[20px] h-[20px] cursor-pointer"
+                            src="/icons/ic_delete.svg"
+                            onClick={() => {
+                              setSelectedMember(m.id);
+                              setDeleteModal(!deleteModal);
+                            }}
+                          />
+                        )}
                       </div>
                     );
                   })}

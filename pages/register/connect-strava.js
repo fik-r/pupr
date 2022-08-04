@@ -2,7 +2,6 @@ import Head from "next/head";
 import { FrLayout2 } from "../../components/FrLayout";
 import FrButton from "../../components/FrButton";
 import { useRouter } from "next/router";
-import base from "daisyui/dist/base";
 import { useEffect, useState } from "react";
 import { ACCESS_TOKEN, STORAGE_TOAST_ERROR } from "../../utils/constants";
 import { ToastError } from "../../components/FrToast";
