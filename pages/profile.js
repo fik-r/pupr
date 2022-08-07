@@ -227,7 +227,7 @@ const Profile = () => {
               <FrText label="Nama Lengkap" value={user.full_name} />
               <FrText
                 label="Tanggal Lahir"
-                value={moment(user.dob).utc().format("DD MMMM YYYY")}
+                value={moment(user.dob).format("DD MMMM YYYY")}
               />
               <FrText label="No Handphone" value={user.phone_number} />
               <div className="flex flex-col">
