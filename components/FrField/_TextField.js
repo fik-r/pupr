@@ -15,9 +15,12 @@ const FrTextField = ({
   const [showIsError, setShowIsError] = useState(false);
   return (
     <div className={`form-control w-[268px] ${containerClass}`}>
-      <label className="label">
-        <span className="fr-text-caption text-black">{label}</span>
-      </label>
+      {label && (
+        <label className="label">
+          <span className="fr-text-caption text-black">{label}</span>
+        </label>
+      )}
+
       <div className="flex items-center relative">
         <input
           type={inputType}
