@@ -35,31 +35,8 @@ const FrItemStanding = ({ groupName, ellapseTime, poin, rank, onClick }) => {
           >
             {ellapseTime}
           </div>
-          {isMobile && (
-            <div
-              className={classnames(
-                "fr-text-caption",
-                rank == 1 || rank > 3 ? "text-secondary" : "",
-                rank == 3 || rank == 2 ? "text-white" : ""
-              )}
-            >
-              {poin} Poin
-            </div>
-          )}
         </div>
         <div className="flex justify-end items-center">
-          {!isMobile && (
-            <div
-              className={classnames(
-                "mr-[60px] fr-text-subhead-2 font-medium",
-                rank == 1 || rank > 3 ? "text-secondary" : "",
-                rank == 3 ? "text-white" : "",
-                rank == 2 ? "text-primary" : ""
-              )}
-            >
-              {poin} Poin
-            </div>
-          )}
           <div
             className={classnames(
               "font-bold italic fr-text-display-1",

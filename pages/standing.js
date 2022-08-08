@@ -7,6 +7,8 @@ import { useState, useEffect } from "react";
 import { ToastError, ToastSuccess } from "../components/FrToast";
 import { FrTextField } from "../components/FrField";
 import { FrItemStanding } from "../components/FrItem";
+import API from "../utils/api";
+import FrPagination from "../components/FrPagination";
 
 const Standing = () => {
   const router = useRouter();
@@ -14,12 +16,88 @@ const Standing = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [detailModal, setDetailModal] = useState(true);
+  const [list, setList] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [detail, setDetail] = useState({
+    captain: {},
+    member: [],
+  });
+  const [page, setPage] = useState(router.query.page || 1);
+  const [query, setQuery] = useState(router.query.query || "");
+  const [category, setCategory] = useState(router.query.category || "01.A");
+  const [detailModal, setDetailModal] = useState(false);
 
-  function openDetail() {
+  useEffect(() => {
+    // router.push("/standing?page=1&query=&page=1&category=01.A", undefined, { shallow: true });
+  }, []);
+
+  useEffect(() => {
+    getStandings(page);
+  }, [query, category, page]);
+
+  function openDetail(detail) {
+    setDetail(detail);
     setDetailModal(true);
   }
 
+  function secondsToHms(d) {
+    d = Number(d);
+    var h = Math.floor(d / 3600);
+    var m = Math.floor((d % 3600) / 60);
+    var s = Math.floor((d % 3600) % 60);
+
+    var hDisplay = h > 0 ? (h < 10 ? "0" : "") + h + ":" : "00:";
+    var mDisplay = m > 0 ? (m < 10 ? "0" : "") + m + ":" : "00:";
+    var sDisplay = s > 0 ? (s < 10 ? "0" : "") + s : "00";
+    return hDisplay + mDisplay + sDisplay;
+  }
+
+  const prevPage = () => {
+    if (page !== 1) {
+      setPage(page - 1);
+    }
+  };
+
+  const goToSpecificPage = (targetPage) => {
+    setPage(targetPage);
+  };
+
+  const nextPage = () => {
+    let lastpage = totalPages;
+
+    if (page !== lastpage) {
+      setPage(page + 1);
+    }
+  };
+
+  function getStandings(page) {
+    setLoading(true);
+    API.get("/api/standing", {
+      params: {
+        q: query,
+        page: page,
+        limit: 10,
+        category: category,
+      },
+    })
+      .then((res) => {
+        setTotal(res.data.payload.total);
+        setList(res.data.payload.leaderboards);
+        if (res.data.payload.total > 0) {
+          let totalPage_temp = Math.ceil(res.data.payload.total / 10);
+          console.log(totalPage_temp);
+          setTotalPages(totalPage_temp);
+        }
+        setPage(page);
+      })
+      .catch((err) => {
+        setError(ToastError(err.response.data.message));
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }
   return (
     <FrLayout2 error={error} success={success}>
       <Head>
@@ -27,6 +105,14 @@ const Standing = () => {
         <meta name="description" content="Run ride description" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      {loading && (
+        <div className="absolute w-screen h-full bg-muted/25 flex justify-center top-0 right-0 z-50">
+          <div
+            className="radial-progress bg-primary text-primary-content border-4 border-primary mt-[350px] animate-spin"
+            style={{ "--value": 70 }}
+          ></div>
+        </div>
+      )}
       <div className={`modal ${detailModal == true ? "modal-open" : ""}`}>
         <div className="modal-box flex-col w-[700px] mobile:w-[388px] px-auto mobile:h-screen rounded-[10px] mobile:mx-3">
           <label
@@ -40,10 +126,10 @@ const Standing = () => {
           </label>
           <div className="mobile:pt-[50px] flex mobile:justify-center justify-start items-center">
             <span className="mobile:uppercase fr-text-subhead-2 text-secondary font-bold mr-[10px]">
-              Group unit 8921
+              {detail.full_name}
             </span>
             <span className="mobile:uppercase fr-text-body font-bold bg-secondary rounded-full py-[6px] px-[10px] flex justify-center items-center text-white">
-              #1
+              #{detail.current_rank_position}
             </span>
           </div>
           <div className="grid grid-cols-2 gap-x-3 mt-[22px]">
@@ -55,13 +141,13 @@ const Standing = () => {
                 Distance
               </span>
               <span className="fr-text-body text-secondary font-weight-medium mt-[5px]">
-                85Km
+                {detail.sum_distance / 1000}Km
               </span>
               <span className="fr-text-caption text-muted font-weight-medium mt-[10px]">
                 Elapsed Time
               </span>
               <span className="fr-text-body text-secondary font-weight-medium mt-[5px]">
-                10 Jam : 17 Menit : 8 Detik
+                {secondsToHms(detail.sum_elapsed_time)}
               </span>
             </div>
             <div className="flex flex-col cursor-pointer justify-start  mt-[7px] bg-[#FCFCFC] bg-[##E3E3E3] rounded-[5px] border border-[#E3E3E3] p-[15px]">
@@ -72,31 +158,66 @@ const Standing = () => {
                 Distance
               </span>
               <span className="fr-text-body text-secondary font-weight-medium mt-[5px]">
-                85Km
+                {detail.target_sum_distance / 1000}Km
               </span>
               <span className="fr-text-caption text-muted font-weight-medium mt-[10px]">
                 Elapsed Time
               </span>
               <span className="fr-text-body text-secondary font-weight-medium mt-[5px]">
-                10 Jam : 17 Menit : 8 Detik
+                {secondsToHms(detail.target_total_elapsed_time)}
               </span>
             </div>
           </div>
           <div className="flex flex-col">
             <span className="fr-text-body pt-[20px] pb-[10px">Ketua Group</span>
-            <div className="flex cursor-pointer justify-between items-center mt-[7px] bg-[#FCFCFC] bg-[##E3E3E3] rounded-[5px] border border-[#E3E3E3] p-[15px]">
-              <span className="fr-text-subhead-1 text-black font-weight-medium">
-                Ridwan
-              </span>
-            </div>
+            {!detail.captain && "-"}
+            {detail.captain && (
+              <div className="flex cursor-pointer justify-between items-center mt-[7px] bg-[#FCFCFC] bg-[##E3E3E3] rounded-[5px] border border-[#E3E3E3] p-[15px]">
+                <span className="fr-text-subhead-1 text-black font-weight-medium">
+                  {detail.captain.full_name}
+                </span>
+                <div className="flex flex-col">
+                  <span className="fr-text-caption text-secondary">
+                    Elapsed Time
+                  </span>
+                  <span className="self-end fr-text-caption text-secondary">
+                    {secondsToHms(detail.captain.sum_elapsed_time)}
+                  </span>
+                </div>
+              </div>
+            )}
           </div>
           <div className="flex flex-col">
             <span className="fr-text-body pt-[20px] pb-[10px">Anggota</span>
-            <div className="flex cursor-pointer justify-between items-center mt-[7px] bg-[#FCFCFC] bg-[##E3E3E3] rounded-[5px] border border-[#E3E3E3] p-[15px]">
-              <span className="fr-text-subhead-1 text-black font-weight-medium">
-                Ridwan
-              </span>
-            </div>
+            {detail.member.length == 0 && "-"}
+            {detail.member.map((m, index) => {
+              return (
+                <div
+                  key={index}
+                  className="grid-cols-3 grid cursor-pointer justify-center items-center mt-[7px] bg-[#FCFCFC] bg-[##E3E3E3] rounded-[5px] border border-[#E3E3E3] p-[15px]"
+                >
+                  <span className="fr-text-subhead-1 text-black font-weight-medium">
+                    {m.full_name}
+                  </span>
+                  <div className="flex flex-col">
+                    <span className="self-center fr-text-caption text-secondary">
+                      Distance
+                    </span>
+                    <span className="self-center fr-text-caption text-secondary">
+                      {m.sum_distance / 1000}Km
+                    </span>
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="self-end fr-text-caption text-secondary">
+                      Elapsed Time
+                    </span>
+                    <span className="self-end fr-text-caption text-secondary">
+                      {secondsToHms(m.sum_elapsed_time)}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -122,89 +243,102 @@ const Standing = () => {
             icon="/icons/ic_search.svg"
             containerClass="w-[284px] mobile:w-[310px] mobile:mt-[27px]"
             onChange={(e) => {
-              // const value = e.target.value;
-              // setPage(1);
-              // setQuery(value);
-              // setData([]);
+              const value = e.target.value;
+              setPage(1);
+              setQuery(value);
             }}
           />
         </div>
         {!isMobile && <div className="border-[0.5px] border-[#E3E3E3]"></div>}
         <div className="tabs grid-cols-3 grid pt-[20px]">
-          <div className="flex flex-col justify-center">
-            <a className="tab !fr-text-title-1 text-secondary font-bold mb-[15px]">
+          <div
+            className="flex flex-col justify-center"
+            onClick={() => {
+              setCategory("01.A");
+            }}
+          >
+            <a
+              className={`tab !fr-text-title-1 ${
+                category == "01.A" ? "text-secondary" : "text-muted"
+              } font-bold mb-[15px]`}
+            >
               RUN 01.A
             </a>
-            <div className="border-b-4 border-secondary" />
+            <div
+              className={`border-b-4 ${
+                category == "01.A" ? "border-secondary" : "border-lightgrey"
+              }`}
+            />
           </div>
-          <div className="flex flex-col justify-center">
-            <a className="tab !fr-text-title-1 text-muted font-bold mb-[15px]">
+          <div
+            className="flex flex-col justify-center"
+            onClick={() => {
+              setCategory("01.B");
+            }}
+          >
+            <a
+              className={`tab !fr-text-title-1 ${
+                category == "01.B" ? "text-secondary" : "text-muted"
+              } font-bold mb-[15px]`}
+            >
               RUN 01.B
             </a>
-            <div className="border-b-4 border-lightgrey" />
+            <div
+              className={`border-b-4 ${
+                category == "01.B" ? "border-secondary" : "border-lightgrey"
+              }`}
+            />
           </div>
-          <div className="flex flex-col justify-center">
-            <a className="tab !fr-text-title-1 text-muted font-bold mb-[15px]">
+          <div
+            className="flex flex-col justify-center"
+            onClick={() => {
+              setCategory("run");
+            }}
+          >
+            <a
+              className={`tab !fr-text-title-1 ${
+                category == "run" ? "text-secondary" : "text-muted"
+              } font-bold mb-[15px]`}
+            >
               RIDE
             </a>
-            <div className="border-b-4 border-lightgrey" />
+            <div
+              className={`border-b-4 ${
+                category == "run" ? "border-secondary" : "border-lightgrey"
+              }`}
+            />
           </div>
         </div>
 
         <div className="grid grid-cols-1">
-          <FrItemStanding
-            rank={1}
-            groupName="Group Unit 1923"
-            poin="1232"
-            ellapseTime="10 Jam : 21 Menit : 45 Detik"
-            onClick={openDetail}
-          />
-          <FrItemStanding
-            rank={2}
-            groupName="Group Unit 1923"
-            poin="1232"
-            ellapseTime="10 Jam : 21 Menit : 45 Detik"
-            onClick={openDetail}
-          />
-          <FrItemStanding
-            rank={3}
-            groupName="Group Unit 1923"
-            poin="1232"
-            ellapseTime="10 Jam : 21 Menit : 45 Detik"
-            onClick={openDetail}
-          />
-          <FrItemStanding
-            rank={4}
-            groupName="Group Unit 1923"
-            poin="1232"
-            ellapseTime="10 Jam : 21 Menit : 45 Detik"
-            onClick={openDetail}
-          />
+          {list.map((item, index) => {
+            return (
+              <FrItemStanding
+                key={index}
+                rank={item.current_rank_position}
+                groupName={item.full_name}
+                ellapseTime={secondsToHms(item.sum_elapsed_time)}
+                onClick={() => {
+                  openDetail(item);
+                }}
+              />
+            );
+          })}
         </div>
         <div className="flex justify-between px-[30px] py-[42px] items-center mobile:justify-center">
           {!isMobile && (
-            <div className="text-black font-medium font-body">12/30 Group</div>
+            <div className="text-black font-medium font-body">
+              {list.length}/{total} Group
+            </div>
           )}
-          <div className="btn-group gap-x-1">
-            <button className="cursor-pointer rounded-none  border border-lightgrey hover:border-secondary w-[37px] h-[37px]">
-              {"<"}
-            </button>
-            <button className="cursor-pointer rounded-none  border border-lightgrey hover:border-secondary w-[37px] h-[37px]">
-              1
-            </button>
-            <button className="cursor-pointer rounded-none bg-secondary w-[37px] h-[37px] text-white">
-              2
-            </button>
-            <button className="cursor-pointer rounded-none  border border-lightgrey hover:border-secondary w-[37px] h-[37px]">
-              3
-            </button>
-            <button className="cursor-pointer rounded-none  border border-lightgrey hover:border-secondary w-[37px] h-[37px]">
-              4
-            </button>
-            <button className="cursor-pointer rounded-none  border border-lightgrey hover:border-secondary w-[37px] h-[37px]">
-              {">"}
-            </button>
-          </div>
+          <FrPagination
+            prevPage={() => prevPage()}
+            nextPage={() => nextPage()}
+            isMobile={isMobile}
+            totalPages={totalPages}
+            goToSpecificPage={(val) => goToSpecificPage(val)}
+            currentPage={page}
+          />
         </div>
       </div>
     </FrLayout2>

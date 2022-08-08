@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import { ToastError, ToastSuccess } from "../components/FrToast";
 import { FrTextField } from "../components/FrField";
 import { FrItemOrganization, FrItemStanding } from "../components/FrItem";
+import API from "../utils/api";
 
 const Standing = () => {
   const router = useRouter();
@@ -14,10 +15,39 @@ const Standing = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [list, setList] = useState([]);
+  const [detail, setDetail] = useState({
+    member: [],
+  });
+  const [total, setTotal] = useState(0);
   const [detailModal, setDetailModal] = useState(false);
 
-  function openDetail() {
+  useEffect(() => {
+    getUnitOrganization(1);
+  }, []);
+  function openDetail(detail) {
+    setDetail(detail);
     setDetailModal(true);
+  }
+
+  function getUnitOrganization(page) {
+    setLoading(true);
+    API.get("/api/unit-organization", {
+      params: {
+        page: page,
+        limit: 10,
+      },
+    })
+      .then((res) => {
+        setTotal(res.data.payload.total);
+        setList(res.data.payload.unitOrganizations);
+      })
+      .catch((err) => {
+        setError(ToastError(err.response.data.message));
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }
   return (
     <FrLayout2 error={error} success={success}>
@@ -26,7 +56,14 @@ const Standing = () => {
         <meta name="description" content="Run ride description" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
+      {loading && (
+        <div className="absolute w-screen h-full bg-muted/25 flex justify-center top-0 right-0 z-50">
+          <div
+            className="radial-progress bg-primary text-primary-content border-4 border-primary mt-[350px] animate-spin"
+            style={{ "--value": 70 }}
+          ></div>
+        </div>
+      )}
       <div className={`modal ${detailModal == true ? "modal-open" : ""}`}>
         <div className="modal-box flex-col w-[507px] mobile:w-[388px] px-auto mobile:h-screen rounded-[10px] mobile:mx-3">
           <label
@@ -40,22 +77,25 @@ const Standing = () => {
           </label>
           <div className="mobile:pt-[50px] flex mobile:justify-center justify-start">
             <span className="mobile:uppercase fr-text-subhead-2 text-secondary font-bold">
-              Unit Organisasi A
+              {detail.name}
             </span>
           </div>
           <div className="pt-[30px] mobile:pt-[40px]">
             <span className="text-body text-muted">Anggota</span>
             <div className="grid grid-cols-1">
-              <div className="flex cursor-pointer justify-between items-center mt-[7px] bg-[#FCFCFC] bg-[##E3E3E3] rounded-[5px] border border-[#E3E3E3] p-[15px]">
-                <span className="fr-text-subhead-1 text-black font-weight-medium">
-                  Ridwan
-                </span>
-              </div>
-              <div className="flex cursor-pointer justify-between items-center mt-[7px] bg-[#FCFCFC] bg-[##E3E3E3] rounded-[5px] border border-[#E3E3E3] p-[15px]">
-                <span className="fr-text-subhead-1 text-black font-weight-medium">
-                  Gio
-                </span>
-              </div>
+              {detail.member.length == 0 && "-"}
+              {detail.member.map((item, index) => {
+                return (
+                  <div
+                    key={index}
+                    className="flex cursor-pointer justify-between items-center mt-[7px] bg-[#FCFCFC] bg-[##E3E3E3] rounded-[5px] border border-[#E3E3E3] p-[15px]"
+                  >
+                    <span className="fr-text-subhead-1 text-black font-weight-medium">
+                      {item.full_name}
+                    </span>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -76,26 +116,17 @@ const Standing = () => {
         </div>
 
         <div className="grid grid-cols-1">
-          <FrItemOrganization
-            ugName="Unit Organisasi A"
-            totalMember={5}
-            onClick={openDetail}
-          />
-          <FrItemOrganization
-            ugName="Unit Organisasi B"
-            totalMember={5}
-            onClick={openDetail}
-          />
-          <FrItemOrganization
-            ugName="Unit Organisasi C"
-            totalMember={5}
-            onClick={openDetail}
-          />
-          <FrItemOrganization
-            ugName="Unit Organisasi D"
-            totalMember={5}
-            onClick={openDetail}
-          />
+          {list.map((item) => {
+            return (
+              <FrItemOrganization
+                ugName={item.name}
+                totalMember={item.member.length}
+                onClick={() => {
+                  openDetail(item);
+                }}
+              />
+            );
+          })}
         </div>
         <div className="flex justify-between px-[30px] py-[42px] items-center mobile:justify-center">
           {!isMobile && (
