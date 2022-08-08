@@ -141,7 +141,7 @@ const Standing = () => {
                 Distance
               </span>
               <span className="fr-text-body text-secondary font-weight-medium mt-[5px]">
-                {detail.sum_distance / 1000}Km
+                {Math.round((detail.sum_distance / 1000) * 100) / 100}Km
               </span>
               <span className="fr-text-caption text-muted font-weight-medium mt-[10px]">
                 Elapsed Time
@@ -158,7 +158,7 @@ const Standing = () => {
                 Distance
               </span>
               <span className="fr-text-body text-secondary font-weight-medium mt-[5px]">
-                {detail.target_sum_distance / 1000}Km
+                {Math.round((detail.target_sum_distance / 1000) * 100) / 100}Km
               </span>
               <span className="fr-text-caption text-muted font-weight-medium mt-[10px]">
                 Elapsed Time
@@ -176,6 +176,16 @@ const Standing = () => {
                 <span className="fr-text-subhead-1 text-black font-weight-medium">
                   {detail.captain.full_name}
                 </span>
+                <div className="flex flex-col">
+                  <span className="self-center fr-text-caption text-secondary">
+                    Distance
+                  </span>
+                  <span className="self-center fr-text-caption text-secondary">
+                    {Math.round((detail.captain.sum_distance / 1000) * 100) /
+                      100}
+                    Km
+                  </span>
+                </div>
                 <div className="flex flex-col">
                   <span className="fr-text-caption text-secondary">
                     Elapsed Time
@@ -204,7 +214,7 @@ const Standing = () => {
                       Distance
                     </span>
                     <span className="self-center fr-text-caption text-secondary">
-                      {m.sum_distance / 1000}Km
+                      {Math.round((m.sum_distance / 1000) * 100) / 100}Km
                     </span>
                   </div>
                   <div className="flex flex-col">

@@ -5,7 +5,7 @@ import { FrLayout2 } from "../components/FrLayout";
 import useResponsive from "../utils/media-query";
 import { useState, useEffect } from "react";
 import { ToastError, ToastSuccess } from "../components/FrToast";
-import { FrTextField } from "../components/FrField";
+import FrPagination from "../components/FrPagination";
 import { FrItemOrganization, FrItemStanding } from "../components/FrItem";
 import API from "../utils/api";
 
@@ -20,15 +20,36 @@ const Standing = () => {
     member: [],
   });
   const [total, setTotal] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
   const [detailModal, setDetailModal] = useState(false);
+  const [page, setPage] = useState(router.query.page || 1);
 
   useEffect(() => {
-    getUnitOrganization(1);
-  }, []);
+    getUnitOrganization(page);
+  }, [page]);
+
   function openDetail(detail) {
     setDetail(detail);
     setDetailModal(true);
   }
+
+  const prevPage = () => {
+    if (page !== 1) {
+      setPage(page - 1);
+    }
+  };
+
+  const goToSpecificPage = (targetPage) => {
+    setPage(targetPage);
+  };
+
+  const nextPage = () => {
+    let lastpage = totalPages;
+
+    if (page !== lastpage) {
+      setPage(page + 1);
+    }
+  };
 
   function getUnitOrganization(page) {
     setLoading(true);
@@ -41,6 +62,11 @@ const Standing = () => {
       .then((res) => {
         setTotal(res.data.payload.total);
         setList(res.data.payload.unitOrganizations);
+        if (res.data.payload.total > 0) {
+          let totalPage_temp = Math.ceil(res.data.payload.total / 10);
+          setTotalPages(totalPage_temp);
+        }
+        setPage(page);
       })
       .catch((err) => {
         setError(ToastError(err.response.data.message));
@@ -131,28 +157,18 @@ const Standing = () => {
         </div>
         <div className="flex justify-between px-[30px] py-[42px] items-center mobile:justify-center">
           {!isMobile && (
-            <div className="text-black font-medium font-body">12/30 Group</div>
+            <div className="text-black font-medium font-body">
+              {list.length}/{total} Group
+            </div>
           )}
-          <div className="btn-group gap-x-1">
-            <button className="cursor-pointer rounded-none  border border-lightgrey hover:border-secondary w-[37px] h-[37px]">
-              {"<"}
-            </button>
-            <button className="cursor-pointer rounded-none  border border-lightgrey hover:border-secondary w-[37px] h-[37px]">
-              1
-            </button>
-            <button className="cursor-pointer rounded-none bg-secondary w-[37px] h-[37px] text-white">
-              2
-            </button>
-            <button className="cursor-pointer rounded-none  border border-lightgrey hover:border-secondary w-[37px] h-[37px]">
-              3
-            </button>
-            <button className="cursor-pointer rounded-none  border border-lightgrey hover:border-secondary w-[37px] h-[37px]">
-              4
-            </button>
-            <button className="cursor-pointer rounded-none  border border-lightgrey hover:border-secondary w-[37px] h-[37px]">
-              {">"}
-            </button>
-          </div>
+          <FrPagination
+            prevPage={() => prevPage()}
+            nextPage={() => nextPage()}
+            isMobile={isMobile}
+            totalPages={totalPages}
+            goToSpecificPage={(val) => goToSpecificPage(val)}
+            currentPage={page}
+          />
         </div>
       </div>
     </FrLayout2>
