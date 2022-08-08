@@ -116,9 +116,10 @@ const Standing = () => {
         </div>
 
         <div className="grid grid-cols-1">
-          {list.map((item) => {
+          {list.map((item, index) => {
             return (
               <FrItemOrganization
+                key={index}
                 ugName={item.name}
                 totalMember={item.member.length}
                 onClick={() => {
