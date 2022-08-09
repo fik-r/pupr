@@ -434,8 +434,8 @@ const Standing = () => {
             src="/icons/ic_burger.svg"
           />
           {drawer && (
-            <div class="fixed top-0 right-0 h-full bg-secondary w-[256px] z-5">
-              <ul class="px-[30px] pt-[102px]">
+            <div className="fixed top-0 right-0 h-full bg-secondary w-[256px] z-5">
+              <ul className="px-[30px] pt-[102px]">
                 <li
                   className="cursor-pointer"
                   onClick={() => {
