@@ -55,7 +55,7 @@ export default async function handler(req, res) {
       if (teamId) {
         const members = await knex("user_accounts")
           .where("team_id", teamId)
-          .select("id");
+          .select("id", "sex");
 
         const memberCount = members.length;
         const maleMember = members.filter((member) => member.sex == "M");
@@ -75,6 +75,7 @@ export default async function handler(req, res) {
         const categoryType2Validation =
           (categoryId == "02" && gender == "M" && maleMemberCount >= 1) ||
           (categoryId == "02" && gender == "F" && femaleMemberCount >= 1);
+        console.log(members)
         if (categoryType1Validation || categoryType2Validation) {
           return response.badRequest(
             "Group sudah penuh, atau anda tidak memenuhi syarat.",
