@@ -7,7 +7,8 @@ import FrButton from "../components/FrButton";
 import { FrTextField } from "../components/FrField";
 import { useState, useEffect } from "react";
 import { ToastError, ToastSuccess } from "../components/FrToast";
-import moment from "moment";
+import moment from "moment-timezone";
+import "moment/locale/id"
 import API from "../utils/api";
 import {
   ATHLETE_ID,
@@ -23,6 +24,7 @@ const Profile = () => {
   const [success, setSuccess] = useState(false);
   const [user, setUser] = useState({});
   const [member, setMember] = useState([]);
+  const [activities, setActivites] = useState([]);
   const [group, setGroup] = useState({});
   const [athleteId, setAthleteId] = useState("");
   const [deleteModal, setDeleteModal] = useState(false);
@@ -48,6 +50,7 @@ const Profile = () => {
         setUser(data.user || {});
         setMember(data.member || {});
         setGroup(data.group || {});
+        setActivites(data.activities || {});
         if (!data.group) {
           localStorage.setItem(
             STORAGE_DRAFT_REGISTER,
@@ -181,7 +184,9 @@ const Profile = () => {
               ✕
             </label>
             <div className="pt-[20px] flex flex-col items-center">
-              <span className="fr-text-headline-1 mb-[25px]">Update Password</span>
+              <span className="fr-text-headline-1 mb-[25px]">
+                Update Password
+              </span>
               <FrTextField
                 label="Password Lama"
                 errorMessage="Password tidak boleh kosong"
@@ -306,6 +311,43 @@ const Profile = () => {
                   })}
                 {member.filter((m) => m.full_name != group.captain_name)
                   .length == 0 && <span>-</span>}
+              </div>
+            </div>
+          </div>
+          <div className="border-[0.5px] border-[#E3E3E3] mt-[32px] mb-[30px]"></div>
+          <span className="px-[45px] mobile:px-[27px]">Aktivitas Saya</span>
+          <div className="flex flex-col mt-[20px] px-[45px] mobile:px-[27px]">
+            <div className="flex flex-col space-y-4">
+              <div className="flex flex-col">
+                {activities.map((activity, index) => {
+                  return (
+                    <div
+                      key={index}
+                      className="flex justify-between items-center  mt-[7px] bg-[#FCFCFC] rounded-[5px] border border-[#E3E3E3] p-[15px]"
+                    >
+                      <div className="flex flex-col">
+                        <span className="self-start fr-text-subhead-1 text-secondary font-medium">
+                          {activity.name}
+                        </span>
+                        <span className="text-muted fr-text-caption">
+                          {moment(activities.start_date)
+                            .tz("Asia/Jakarta")
+                            .format("dddd DD MMMM YYYY")}
+                        </span>
+                      </div>
+                      <div className="flex flex-col mobile:space-x-2">
+                        <span className="self-end fr-text-subhead-1 text-secondary font-medium uppercase">
+                          {activity.type}
+                        </span>
+                        <span className="self-end fr-text-body text-black font-medium text-end">
+                          {Math.round((activity.distance / 1000) * 100) / 100}{" "}
+                          Kilometer
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+                {activities.length == 0 && <span>-</span>}
               </div>
             </div>
           </div>

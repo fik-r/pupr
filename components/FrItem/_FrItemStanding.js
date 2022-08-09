@@ -9,7 +9,7 @@ const FrItemStanding = ({ groupName, ellapseTime, poin, rank, onClick }) => {
       <div
         onClick={onClick}
         className={classnames(
-          "cursor-pointer grid grid-cols-2 mobile:flex mobile:flex-row justify-between px-[30px] py-[20px]",
+          "cursor-pointer grid grid-cols-3 mobile:flex mobile:flex-row justify-between px-[30px] py-[20px] items-center",
           rank > 3 ? "bg-white" : "",
           rank == 1 ? "bg-primary" : "",
           rank == 2 ? "bg-secondary" : "",
@@ -26,16 +26,42 @@ const FrItemStanding = ({ groupName, ellapseTime, poin, rank, onClick }) => {
           >
             {groupName}
           </div>
-          <div
-            className={classnames(
-              "fr-text-body mobile:fr-text-caption",
-              rank == 1 || rank > 3 ? "text-secondary" : "",
-              rank == 2 || rank == 3 ? "text-white" : ""
-            )}
-          >
-            {ellapseTime}
-          </div>
+          {isMobile && (
+            <div
+              className={classnames(
+                "fr-text-body mobile:fr-text-caption",
+                rank == 1 || rank > 3 ? "text-secondary" : "",
+                rank == 2 || rank == 3 ? "text-white" : ""
+              )}
+            >
+              {ellapseTime}
+            </div>
+          )}
         </div>
+        {!isMobile && (
+          <div className="flex-col flex items-center">
+            <div className="flex-col flex">
+              <span
+                className={classnames(
+                  "fr-text-subhead-2",
+                  rank == 1 || rank > 3 ? "text-secondary" : "",
+                  rank == 2 || rank == 3 ? "text-white" : ""
+                )}
+              >
+                Elapsed Time
+              </span>
+              <span
+                className={classnames(
+                  "fr-text-body",
+                  rank == 1 || rank > 3 ? "text-secondary" : "",
+                  rank == 2 || rank == 3 ? "text-white" : ""
+                )}
+              >
+                {ellapseTime}
+              </span>
+            </div>
+          </div>
+        )}
         <div className="flex justify-end items-center">
           <div
             className={classnames(

@@ -1,6 +1,6 @@
 export default function FrLayout1({ children }) {
   return (
-    <div className="absolute -z-10 min-h-screen w-full bg-hero pb-[100px]">
+    <div className="absolute -z-10 min-h-screen w-full bg-hero mobile:bg-white mobile:bg-none pb-[100px]">
       <img
         className="fixed top-0 right-0 -z-10 mobile:w-[123px] mobile:h-[130px]"
         src="/images/bg_1.svg"

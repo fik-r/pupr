@@ -6,10 +6,11 @@ import useResponsive from "../utils/media-query";
 import { useState, useEffect } from "react";
 import { ToastError, ToastSuccess } from "../components/FrToast";
 import FrPagination from "../components/FrPagination";
-import { FrItemOrganization, FrItemStanding } from "../components/FrItem";
+import { FrItemOrganization } from "../components/FrItem";
 import API from "../utils/api";
+import FrButton from "../components/FrButton";
 
-const Standing = () => {
+const UnitOrganization = () => {
   const router = useRouter();
   const { isMobile } = useResponsive();
   const [loading, setLoading] = useState(false);
@@ -19,6 +20,7 @@ const Standing = () => {
   const [detail, setDetail] = useState({
     member: [],
   });
+  const [drawer, setDrawer] = useState(false);
   const [total, setTotal] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [detailModal, setDetailModal] = useState(false);
@@ -88,6 +90,30 @@ const Standing = () => {
             className="radial-progress bg-primary text-primary-content border-4 border-primary mt-[350px] animate-spin"
             style={{ "--value": 70 }}
           ></div>
+        </div>
+      )}
+      {!isMobile && (
+        <div className="flex-row flex mt-5 absolute top-0 right-0 mr-5 space-x-3">
+          <FrButton
+            className="w-[103px] !max-h-[37px] self-center "
+            color="light"
+            icon="/icons/ic_lock.svg"
+            onClick={() => {
+              router.push("/login");
+            }}
+            label="Login"
+            shadow
+          />
+          <FrButton
+            className="w-[166px] !max-h-[37px] self-center "
+            color="light"
+            icon="/icons/ic_group_standing.svg"
+            onClick={() => {
+              router.push("/");
+            }}
+            label="Group Standing"
+            shadow
+          />
         </div>
       )}
       <div className={`modal ${detailModal == true ? "modal-open" : ""}`}>
@@ -171,8 +197,47 @@ const Standing = () => {
           />
         </div>
       </div>
+      {isMobile && (
+        <>
+          <img
+            className={`${
+              drawer ? "fixed" : "absolute"
+            } top-0 right-0 z-10 mx-5 mt-7 cursor-pointer`}
+            onClick={() => {
+              setDrawer(!drawer);
+            }}
+            src="/icons/ic_burger.svg"
+          />
+          {drawer && (
+            <div class="fixed top-0 right-0 h-full bg-secondary w-[256px] z-5">
+              <ul class="px-[30px] pt-[102px]">
+                <li
+                  className="cursor-pointer"
+                  onClick={() => {
+                    router.push("/login");
+                  }}
+                >
+                  <a className="fr-text-subhead-1 text-white font-bold">
+                    Login
+                  </a>
+                </li>
+                <li
+                  className="cursor-pointer mt-[17px]"
+                  onClick={() => {
+                    router.push("/");
+                  }}
+                >
+                  <a className="fr-text-subhead-1 text-white font-bold">
+                    Group Standing
+                  </a>
+                </li>
+              </ul>
+            </div>
+          )}
+        </>
+      )}
     </FrLayout2>
   );
 };
 
-export default Standing;
+export default UnitOrganization;

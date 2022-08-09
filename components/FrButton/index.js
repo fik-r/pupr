@@ -12,12 +12,14 @@ const FrButton = (props) => {
     disabled,
     selected,
     loading,
+    shadow,
   } = props;
 
   return (
     <button
       className={classnames(
         `btn`,
+        `${shadow ? "shadow-md" : ""}`,
         `normal-case`,
         `font-normal`,
         `${
