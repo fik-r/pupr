@@ -53,6 +53,7 @@ const Profile = () => {
             STORAGE_DRAFT_REGISTER,
             JSON.stringify({
               gender: data.user.sex,
+              dob: data.user.dob,
               unitOrganization: data.user.organization,
             })
           );
