@@ -8,7 +8,7 @@ import { FrTextField } from "../components/FrField";
 import { useState, useEffect } from "react";
 import { ToastError, ToastSuccess } from "../components/FrToast";
 import moment from "moment-timezone";
-import "moment/locale/id"
+import "moment/locale/id";
 import API from "../utils/api";
 import {
   ATHLETE_ID,
@@ -330,9 +330,9 @@ const Profile = () => {
                           {activity.name}
                         </span>
                         <span className="text-muted fr-text-caption">
-                          {moment(activities.start_date)
-                            .tz("Asia/Jakarta")
-                            .format("dddd DD MMMM YYYY")}
+                          {moment(activity.start_date_local).format(
+                            "dddd DD MMMM YYYY, hh:mm"
+                          )}
                         </span>
                       </div>
                       <div className="flex flex-col mobile:space-x-2">

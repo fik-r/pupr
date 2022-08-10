@@ -52,13 +52,13 @@ export default async function handler(req, res) {
                 .where("u.team_id", user.team_id)
                 .select("u.full_name", "u.sex", "u.id"),
               knex("strava_activities as sv")
-                .where("sv.athlete_id", user.athlete_id)
+                .where("sv.athlete_id", "97708675")
                 .select(
                   "sv.name",
                   "sv.distance",
                   "sv.type",
                   "sv.elapsed_time",
-                  "sv.start_date"
+                  "sv.start_date_local"
                 ),
             ]);
 
