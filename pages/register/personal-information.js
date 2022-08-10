@@ -69,7 +69,7 @@ const RegisterPersonalInformation = () => {
             password: password,
             fullName: fullName,
             nip: nip,
-            dob: moment(dob).utc(),
+            dob: moment(dob).format(),
             gender: gender,
             phoneNumber: phoneNumber,
             unitOrganization: unitOrganization,
