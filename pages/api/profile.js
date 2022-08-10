@@ -64,18 +64,18 @@ export default async function handler(req, res) {
               const femaleMemberCount = femaleMember ? femaleMember.length : 0;
 
               const categoryType1Validation =
-                ((userGroup.category == "01.A" ||
+                (userGroup.category == "01.A" ||
                   userGroup.category == "01.B") &&
-                  maleMemberCount == 3) ||
-                ((userGroup.category == "01.A" ||
+                maleMemberCount == 3 &&
+                (userGroup.category == "01.A" ||
                   userGroup.category == "01.B") &&
-                  femaleMemberCount == 2);
+                femaleMemberCount == 2;
 
               const categoryType2Validation =
-                (userGroup.category == "02" &&
-                  maleMemberCount == 1) ||
-                (userGroup.category == "02" &&
-                  femaleMemberCount == 1);
+                userGroup.category == "02" &&
+                maleMemberCount == 1 &&
+                userGroup.category == "02" &&
+                femaleMemberCount == 1;
               let isReady = categoryType1Validation || categoryType2Validation;
 
               userGroup.isReady = isReady;
