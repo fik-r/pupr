@@ -10,7 +10,7 @@ import {
   STORAGE_DRAFT_REGISTER,
 } from "../../utils/constants";
 import { ToastSuccess, ToastError } from "../../components/FrToast";
-import moment from "moment";
+import moment from "moment-timezone";
 import API from "../../utils/api";
 
 const RegisterPersonalInformation = () => {
@@ -69,7 +69,7 @@ const RegisterPersonalInformation = () => {
             password: password,
             fullName: fullName,
             nip: nip,
-            dob: moment(dob).format(),
+            dob: moment(dob).utc(),
             gender: gender,
             phoneNumber: phoneNumber,
             unitOrganization: unitOrganization,
@@ -226,8 +226,7 @@ const RegisterPersonalInformation = () => {
           <div className="flex w-[552px] rounded-[5px] p-[17px] border border-lightgrey mx-auto">
             <img src="/icons/ic_red_dot.svg" className="mr-[15px]" />
             <span className="fr-text-caption ">
-              Saya menyetujui{" "}
-              <span >syarat dan ketentuan</span>
+              Saya menyetujui <span>syarat dan ketentuan</span>
             </span>
           </div>
         )}

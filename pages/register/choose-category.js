@@ -9,11 +9,11 @@ import {
   LIST_CATEGORY,
   STORAGE_DRAFT_REGISTER,
 } from "../../utils/constants";
-import moment from "moment";
+import moment from "moment-timezone";
 
 const RegisterChooseCategory = () => {
   const router = useRouter();
-  const [draft, setDraft] = useState({})
+  const [draft, setDraft] = useState({});
   const [listCategory, setListCategory] = useState(
     LIST_CATEGORY.map((category) => {
       return {
@@ -27,7 +27,7 @@ const RegisterChooseCategory = () => {
   useEffect(() => {
     const draftRegister =
       JSON.parse(localStorage.getItem(STORAGE_DRAFT_REGISTER)) || {};
-    setDraft(draftRegister)
+    setDraft(draftRegister);
     if (!draftRegister.email && !localStorage.getItem(ACCESS_TOKEN)) {
       router.push("/");
     } else {
@@ -73,8 +73,8 @@ const RegisterChooseCategory = () => {
               category.title == "02"
                 ? false
                 : category.title == "01.A"
-                ? moment(draft.dob) <= moment("1981-08-13")
-                : moment(draft.dob) > moment("1981-08-13");
+                ? moment(draft.dob).tz("Asia/Jakarta") <= moment("1981-08-13")
+                : moment(draft.dob).tz("Asia/Jakarta") > moment("1981-08-13");
             return (
               <FrCardCategory
                 key={index}

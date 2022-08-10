@@ -7,7 +7,7 @@ import FrButton from "../components/FrButton";
 import { FrTextField } from "../components/FrField";
 import { useState, useEffect } from "react";
 import { ToastError, ToastSuccess } from "../components/FrToast";
-import moment from "moment";
+import moment from "moment-timezone";
 import API from "../utils/api";
 import {
   ATHLETE_ID,
@@ -182,7 +182,9 @@ const Profile = () => {
               ✕
             </label>
             <div className="pt-[20px] flex flex-col items-center">
-              <span className="fr-text-headline-1 mb-[25px]">Update Password</span>
+              <span className="fr-text-headline-1 mb-[25px]">
+                Update Password
+              </span>
               <FrTextField
                 label="Password Lama"
                 errorMessage="Password tidak boleh kosong"
@@ -228,7 +230,9 @@ const Profile = () => {
               <FrText label="Nama Lengkap" value={user.full_name} />
               <FrText
                 label="Tanggal Lahir"
-                value={moment(user.dob).format("DD MMMM YYYY")}
+                value={moment(user.dob)
+                  .tz("Asia/Jakarta")
+                  .format("DD MMMM YYYY")}
               />
               <FrText label="No Handphone" value={user.phone_number} />
               <div className="flex flex-col">
