@@ -28,7 +28,8 @@ export default async function handler(req, res) {
                 "u.phone_number",
                 "u.sex",
                 "u.team_id",
-                "us.profile"
+                "us.profile",
+                "us.athlete_id"
               )
               .first();
 
@@ -36,7 +37,7 @@ export default async function handler(req, res) {
               return response.notFound("User tidak ditemukan", res);
             }
 
-            const [userGroup, memberUserGroup] = await Promise.all([
+            const [userGroup, memberUserGroup, activities] = await Promise.all([
               knex("team as t")
                 .where("t.id", user.team_id)
                 .join("user_accounts as u", "u.id", "t.user_id")
@@ -50,6 +51,15 @@ export default async function handler(req, res) {
               knex("user_accounts as u")
                 .where("u.team_id", user.team_id)
                 .select("u.full_name", "u.sex", "u.id"),
+              knex("strava_activities as sv")
+                .where("sv.athlete_id", "97708675")
+                .select(
+                  "sv.name",
+                  "sv.distance",
+                  "sv.type",
+                  "sv.elapsed_time",
+                  "sv.start_date_local"
+                ),
             ]);
 
             if (userGroup) {
@@ -86,6 +96,7 @@ export default async function handler(req, res) {
                 user: user,
                 group: userGroup,
                 member: memberUserGroup,
+                activities: activities,
               },
               res
             );
