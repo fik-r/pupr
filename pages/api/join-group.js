@@ -2,6 +2,8 @@
 import knex from "../../utils/knex";
 import response from "../../utils/response";
 import jwt from "jsonwebtoken";
+import { uuid } from "uuidv4";
+import moment from "moment";
 
 export default async function handler(req, res) {
   if (req.method == "POST") {
@@ -83,6 +85,7 @@ export default async function handler(req, res) {
 
             return response.ok("Successfully join group", {}, res);
           } catch (e) {
+            console.log(e)
             return response.error(500, "Internal server error", res);
           }
         }
