@@ -40,6 +40,15 @@ const Home = () => {
           Dalam memperingati{" "}
           <span className="text-black font-bold">HUT RI 77</span>
         </span>
+
+        <FrButton
+          className="w-[242px] h-[61px] self-center mt-[49px] mobile:mt-[40px]"
+          color="primary"
+          onClick={() => {
+            router.push("register/personal-information");
+          }}
+          label="Daftar Sekarang"
+        />
       </div>
     </FrLayout1>
   );
