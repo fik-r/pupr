@@ -27,7 +27,7 @@ export default async function handler(req, res) {
         })
         .where("l.category", category)
         .where(
-          "type",
+          "l.type",
           category == "01.A" || category == "01.B" ? "run" : "ride"
         )
         .offset(offset)
