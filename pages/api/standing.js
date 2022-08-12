@@ -13,6 +13,10 @@ export default async function handler(req, res) {
 
       const totalGroupParticipant = await knex("leader_boards")
         .where("category", category)
+        .where(
+          "type",
+          category == "01.A" || category == "01.B" ? "run" : "ride"
+        )
         .count();
       const leaderboards = await knex("leader_boards as l")
         .modify((queryBuilder) => {
