@@ -29,7 +29,7 @@ const SuccessForgotPassword = () => {
           Password berhasil direset
         </span>
         <span className="fr-text-subhead-1 mobile:fr-text-body text-muted self-center">
-          Silahkan login menggunakan tanggal lahir kamu, misal: 2010-12-25
+          Silahkan login menggunakan nip kamu
         </span>
         <FrButton
           className="w-[242px] h-[61px] self-center mt-[28px]"

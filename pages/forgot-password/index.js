@@ -13,19 +13,19 @@ const ForgotPassword = () => {
 
   const { isMobile } = useResponsive();
   const [email, setEmail] = useState("");
-  const [dob, setDob] = useState("");
+  const [nip, setNip] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
 
   const emailValidation = email.length == 0;
-  const dobValidation = dob.length == 0;
+  const nipValidation = nip.length == 0;
 
   function submitForgotPassword() {
     setLoading(true);
     API.post("/api/forgot-password", {
       email: email || "",
-      dob: dob || "",
+      nip: nip || "",
     })
       .then((res) => {
         router.push("/forgot-password/success-forgot-password");
@@ -64,16 +64,17 @@ const ForgotPassword = () => {
             value={email}
           />
           <FrTextField
-            label="Tanggal Lahir"
-            errorMessage="Tanggal lahir tidak boleh kosong"
-            isError={dobValidation}
-            placeholder="Masukkan Tanggal Lahir"
-            inputType="date"
-            icon="/icons/ic_calendar.svg"
-            value={dob}
+            label="NIP/NRP"
+            errorMessage="Nip tidak boleh kosong"
+            isError={nipValidation}
+            placeholder="Masukkan NIP/NRP"
+            inputType="text"
+            value={nip}
+            pattern="[0-9]*"
             onChange={(event) => {
               const value = event.target.value;
-              setDob(value);
+              const isValid = event.target.validity.valid;
+              setNip(isValid || value == "" ? value : nip);
             }}
           />
         </div>
@@ -81,7 +82,7 @@ const ForgotPassword = () => {
           <FrButton
             className="w-[268px]"
             color="primary"
-            disabled={emailValidation || dobValidation}
+            disabled={emailValidation || nipValidation}
             label="Kirim"
             loading={loading}
             onClick={submitForgotPassword}

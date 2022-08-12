@@ -6,28 +6,25 @@ import bcrypt from "bcryptjs";
 
 export default async function handler(req, res) {
   if (req.method == "POST") {
-    const { email, dob } = req.body;
+    const { email, nip } = req.body;
     try {
       if (!email) return response.badRequest("field email required", res);
-      if (!dob) return response.badRequest("field dob required", res);
+      if (!nip) return response.badRequest("field nip required", res);
 
       const user = await knex("user_accounts")
         .where("email", email)
-        .select("id", "dob")
+        .select("id", "nip")
         .first();
 
       if (!user) {
         return response.notFound("Email tidak ditemukan", res);
       }
-      if (moment(user.dob).format("YYYY-MM-DD") != dob) {
+      if (user.nip != nip) {
         return response.badRequest("Tanggal lahir tidak sesuai", res);
       }
 
       var salt = bcrypt.genSaltSync(10);
-      var hashedPassword = bcrypt.hashSync(
-        moment(user.dob).format("YYYY-MM-DD"),
-        salt
-      );
+      var hashedPassword = bcrypt.hashSync(user.nip, salt);
 
       await knex("user_accounts").where("id", user.id).update({
         password: hashedPassword,
