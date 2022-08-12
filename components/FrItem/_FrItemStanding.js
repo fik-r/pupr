@@ -1,7 +1,14 @@
 import classnames from "classnames";
 import useResponsive from "../../utils/media-query";
 
-const FrItemStanding = ({ groupName, ellapseTime, poin, rank, onClick, totalDistance }) => {
+const FrItemStanding = ({
+  groupName,
+  ellapseTime,
+  poin,
+  rank,
+  onClick,
+  totalDistance,
+}) => {
   const { isMobile } = useResponsive();
   return (
     <>
@@ -33,7 +40,7 @@ const FrItemStanding = ({ groupName, ellapseTime, poin, rank, onClick, totalDist
                 rank == 2 || rank == 3 ? "text-white" : ""
               )}
             >
-              {ellapseTime}
+              {ellapseTime} || {totalDistance}Km
             </div>
           )}
         </div>

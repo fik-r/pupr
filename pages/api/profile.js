@@ -37,6 +37,7 @@ export default async function handler(req, res) {
               return response.notFound("User tidak ditemukan", res);
             }
 
+            console.log(user.athlete_id)
             const [userGroup, memberUserGroup, activities] = await Promise.all([
               knex("team as t")
                 .where("t.id", user.team_id)
