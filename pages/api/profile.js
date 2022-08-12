@@ -53,6 +53,7 @@ export default async function handler(req, res) {
                 .select("u.full_name", "u.sex", "u.id"),
               knex("strava_activities as sv")
                 .where("sv.athlete_id", user.athlete_id)
+                .orderBy("start_date", "desc")
                 .select(
                   "sv.name",
                   "sv.distance",
