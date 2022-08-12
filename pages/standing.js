@@ -335,6 +335,7 @@ const Standing = () => {
           <div
             className="flex flex-col justify-center"
             onClick={() => {
+              setPage(1);
               setCategory("01.A");
             }}
           >
@@ -354,6 +355,7 @@ const Standing = () => {
           <div
             className="flex flex-col justify-center"
             onClick={() => {
+              setPage(1);
               setCategory("01.B");
             }}
           >
@@ -373,6 +375,7 @@ const Standing = () => {
           <div
             className="flex flex-col justify-center"
             onClick={() => {
+              setPage(1);
               setCategory("02");
             }}
           >
