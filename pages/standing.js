@@ -373,7 +373,7 @@ const Standing = () => {
           <div
             className="flex flex-col justify-center"
             onClick={() => {
-              setCategory("run");
+              setCategory("02");
             }}
           >
             <a
