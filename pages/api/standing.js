@@ -26,6 +26,10 @@ export default async function handler(req, res) {
             ]);
         })
         .where("l.category", category)
+        .where(
+          "type",
+          category == "01.A" || category == "01.B" ? "run" : "ride"
+        )
         .offset(offset)
         .limit(limit)
         .orderBy("l.current_rank_position", "asc")
