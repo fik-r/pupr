@@ -402,6 +402,7 @@ const Standing = () => {
                 rank={item.current_rank_position}
                 groupName={item.full_name}
                 ellapseTime={secondsToHms(item.sum_elapsed_time)}
+                totalDistance={Math.round((item.target_sum_distance / 1000) * 100) / 100}
                 onClick={() => {
                   openDetail(item);
                 }}
