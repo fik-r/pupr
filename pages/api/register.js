@@ -23,6 +23,7 @@ export default async function handler(req, res) {
       password,
     } = req.body;
     try {
+      return response.badRequest("Sudah tidak bisa daftar", res);
       if (!email) return response.badRequest("field email required", res);
       if (!password) return response.badRequest("field password required", res);
       if (!fullName) return response.badRequest("field name required", res);
@@ -75,7 +76,7 @@ export default async function handler(req, res) {
         const categoryType2Validation =
           (categoryId == "02" && gender == "M" && maleMemberCount >= 1) ||
           (categoryId == "02" && gender == "F" && femaleMemberCount >= 1);
-        console.log(members)
+        console.log(members);
         if (categoryType1Validation || categoryType2Validation) {
           return response.badRequest(
             "Group sudah penuh, atau anda tidak memenuhi syarat.",

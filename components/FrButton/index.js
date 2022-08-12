@@ -12,6 +12,7 @@ const FrButton = (props) => {
     disabled,
     selected,
     loading,
+    shadow,
   } = props;
 
   return (
@@ -20,6 +21,7 @@ const FrButton = (props) => {
         `btn`,
         `normal-case`,
         `font-normal`,
+        `${shadow ? "shadow-md" : ""}`,
         `${
           color == "primary" && !selected ? "btn-primary text-secondary" : ""
         }`,

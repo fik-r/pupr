@@ -33,6 +33,7 @@ const Profile = () => {
   const [newPassword, setNewPassword] = useState("");
   const [oldPassword, setOldPassword] = useState("");
   const [loadingPassword, setLoadingPassword] = useState(false);
+  const [drawer, setDrawer] = useState(false);
 
   useEffect(() => {
     if (!localStorage.getItem(ACCESS_TOKEN)) {
@@ -122,16 +123,31 @@ const Profile = () => {
           ></div>
         </div>
       )}
-      <FrButton
-        className="w-[124px] !max-h-[37px] self-center mt-5 absolute top-0 right-0 mr-5"
-        color="light"
-        icon="/icons/ic_logout.svg"
-        onClick={() => {
-          localStorage.clear();
-          router.push("/");
-        }}
-        label="Logout"
-      />
+      {!isMobile && (
+        <div className="flex-row flex mt-5 absolute top-0 right-0 mr-5 space-x-3">
+          <FrButton
+            className="w-[166px] !max-h-[37px] self-center "
+            color="light"
+            icon="/icons/ic_group_standing.svg"
+            shadow
+            onClick={() => {
+              router.push("/");
+            }}
+            label="Group Standing"
+          />
+          <FrButton
+            className="w-[103px] !max-h-[37px] self-center "
+            color="light"
+            shadow
+            icon="/icons/ic_logout.svg"
+            onClick={() => {
+              localStorage.clear();
+              router.push("/");
+            }}
+            label="Logout"
+          />
+        </div>
+      )}
 
       <div className="flex-row flex mobile:flex-col mobile:items-center justify-center gap-x-10 px-12 mobile:px-0">
         <div className="card w-[321px] h-fit bg-base-100 border border-lightgrey rounded-[20px] p-[30px] mt-5 flex items-center">
@@ -356,6 +372,46 @@ const Profile = () => {
           </div>
         </div>
       </div>
+      {isMobile && (
+        <>
+          <img
+            className={`${
+              drawer ? "fixed" : "absolute"
+            } top-0 right-0 z-10 mx-5 mt-7 cursor-pointer`}
+            onClick={() => {
+              setDrawer(!drawer);
+            }}
+            src="/icons/ic_burger.svg"
+          />
+          {drawer && (
+            <div className="fixed top-0 right-0 h-full bg-secondary w-[256px] z-5">
+              <ul className="px-[30px] pt-[102px]">
+                <li
+                  className="cursor-pointer"
+                  onClick={() => {
+                    router.push("/");
+                  }}
+                >
+                  <a className="fr-text-subhead-1 text-white font-bold">
+                    Group Standing
+                  </a>
+                </li>
+                <li
+                  className="cursor-pointer mt-[17px]"
+                  onClick={() => {
+                    localStorage.clear();
+                    router.push("/");
+                  }}
+                >
+                  <a className="fr-text-subhead-1 text-white font-bold">
+                    Logout
+                  </a>
+                </li>
+              </ul>
+            </div>
+          )}
+        </>
+      )}
     </FrLayout2>
   );
 };
