@@ -11,14 +11,14 @@ export default async function handler(req, res) {
       const limit = parseInt(req.query.limit);
       const offset = parseInt(page != 0 ? page * limit : 0);
 
-      const totalGroupParticipant = await knex("leader_boards")
+      const totalGroupParticipant = await knex("leader_boards_final")
         .where("category", category)
         .where(
           "type",
           category == "01.A" || category == "01.B" ? "run" : "ride"
         )
         .count();
-      const leaderboards = await knex("leader_boards as l")
+      const leaderboards = await knex("leader_boards_final as l")
         .modify((queryBuilder) => {
           if (query)
             queryBuilder.whereRaw("LOWER(l.full_name) LIKE ?", [
@@ -49,7 +49,7 @@ export default async function handler(req, res) {
         const leaderboard = leaderboards[i];
         const groupCaptain = await knex("team as t")
           .join("user_accounts as u", "u.id", "t.user_id")
-          .leftJoin("leader_boards as l", "l.user_id", "t.user_id")
+          .leftJoin("leader_boards_final as l", "l.user_id", "t.user_id")
           .where("t.id", leaderboard.team_id)
           .select(
             "u.id",
@@ -69,7 +69,7 @@ export default async function handler(req, res) {
           groupMember = await knex("user_accounts as u")
             .where("u.team_id", leaderboard.team_id)
             .where("u.id", "!=", groupCaptain.id)
-            .leftJoin("leader_boards as l", "l.user_id", "u.id")
+            .leftJoin("leader_boards_final as l", "l.user_id", "u.id")
 
             .select(
               "u.full_name",
